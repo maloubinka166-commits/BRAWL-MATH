@@ -3502,8 +3502,8 @@
  async function loadProfile(user){
    // Алдымен мұғалім құжатын тексереміз: мұғалім students ішінде де болса,
    // оның teacher рөлі жоғалып кетпеуі керек.
-   const teacherQuery = await getDocs(
-  query(
+  const teacherQuery = await getDocs(
+  firebaseQuery(
     collection(db, 'teachers'),
     where('uid', '==', user.uid)
   )
