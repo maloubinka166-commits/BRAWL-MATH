@@ -1,0 +1,3548 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>BRAWL MATH · 2 КЕЗЕҢ</title>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Bangers&family=Fredoka:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; user-select:none; -webkit-tap-highlight-color:transparent; }
+  
+  html, body {
+    width:100%; height:100%; overflow:hidden;
+    background:#000;
+    font-family:'Fredoka', 'Lilita One', 'Arial Black', sans-serif;
+    touch-action:none;
+  }
+  
+  .author-tag {
+    position:fixed;
+    bottom:8px;
+    right:12px;
+    font-family:'Bangers', cursive;
+    font-size:14px;
+    color:rgba(185,94,255,0.7);
+    letter-spacing:2px;
+    z-index:9999;
+    text-shadow:0 0 10px rgba(185,94,255,0.8), 1px 1px 2px black;
+    pointer-events:none;
+    user-select:none;
+  }
+  .author-tag span {
+    color:rgba(255,255,255,0.85);
+    font-size:12px;
+    letter-spacing:1px;
+  }
+  
+  .intro-screen {
+    position:fixed; inset:0;
+    background:radial-gradient(ellipse at center, #2a1a5a 0%, #0a0a2a 60%, #000 100%);
+    z-index:1000;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    overflow:hidden; cursor:pointer;
+  }
+  .intro-screen.hide {
+    animation:introExit 0.9s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+    pointer-events:none;
+  }
+  @keyframes introExit {
+    0% { opacity:1; transform:scale(1); }
+    100% { opacity:0; transform:scale(1.5); }
+  }
+  
+  .stars-bg {
+    position:absolute; inset:0;
+    background-image:
+      radial-gradient(2px 2px at 20% 30%, #fff, transparent),
+      radial-gradient(2px 2px at 60% 70%, #fff, transparent),
+      radial-gradient(1px 1px at 80% 20%, #fff, transparent),
+      radial-gradient(2px 2px at 40% 80%, #fff, transparent),
+      radial-gradient(1px 1px at 90% 50%, #fff, transparent),
+      radial-gradient(2px 2px at 15% 60%, #fff, transparent),
+      radial-gradient(1px 1px at 70% 40%, #fff, transparent),
+      radial-gradient(2px 2px at 35% 15%, #fff, transparent),
+      radial-gradient(1px 1px at 50% 90%, #fff, transparent),
+      radial-gradient(2px 2px at 85% 85%, #fff, transparent);
+    animation:starsTwinkle 3s ease-in-out infinite;
+  }
+  @keyframes starsTwinkle { 0%,100% { opacity:0.5; } 50% { opacity:1; } }
+  
+  .rays {
+    position:absolute; inset:-50%;
+    background:conic-gradient(from 0deg, transparent 0deg, rgba(185,94,255,0.15) 10deg, transparent 20deg, transparent 30deg, rgba(255,215,100,0.15) 40deg, transparent 50deg, transparent 60deg, rgba(100,200,255,0.15) 70deg, transparent 80deg);
+    animation:raysRotate 20s linear infinite;
+    opacity:0.6;
+  }
+  @keyframes raysRotate { to { transform:rotate(360deg); } }
+  
+  .burst {
+    position:absolute; top:50%; left:50%;
+    width:100px; height:100px;
+    border-radius:50%;
+    background:radial-gradient(circle, #fff, #b95eff 30%, transparent 70%);
+    transform:translate(-50%, -50%) scale(0);
+    animation:burstOut 1.2s cubic-bezier(0.2, 1.5, 0.4, 1) 0.2s forwards;
+    pointer-events:none;
+  }
+  @keyframes burstOut {
+    0% { transform:translate(-50%, -50%) scale(0); opacity:1; }
+    50% { transform:translate(-50%, -50%) scale(8); opacity:0.8; }
+    100% { transform:translate(-50%, -50%) scale(20); opacity:0; }
+  }
+  
+  .intro-logo {
+    position:relative; z-index:5; text-align:center;
+    animation:logoDrop 1s cubic-bezier(0.2, 1.5, 0.4, 1) 0.4s both;
+  }
+  @keyframes logoDrop {
+    0% { transform:translateY(-200px) scale(0.3) rotate(-15deg); opacity:0; }
+    60% { transform:translateY(20px) scale(1.1) rotate(3deg); opacity:1; }
+    80% { transform:translateY(-10px) scale(0.95) rotate(-1deg); }
+    100% { transform:translateY(0) scale(1) rotate(0); opacity:1; }
+  }
+  
+  .intro-title-1 {
+    font-family:'Bangers', cursive;
+    font-size:clamp(50px, 12vw, 130px);
+    color:#b95eff;
+    letter-spacing:12px;
+    text-shadow:0 0 20px #b95eff, 4px 4px 0 #4a1a8a, 8px 8px 0 #2a0050, 0 0 60px #b95eff;
+    line-height:1;
+    transform:skewY(-5deg);
+    animation:titleGlow 2s ease-in-out infinite;
+  }
+  @keyframes titleGlow { 0%,100% { filter:brightness(1); } 50% { filter:brightness(1.3); } }
+  
+  .intro-title-2 {
+    font-family:'Bangers', cursive;
+    font-size:clamp(24px, 5vw, 52px);
+    color:#fff;
+    letter-spacing:6px;
+    text-shadow:3px 3px 0 #4a1a8a, 6px 6px 0 #2a0050, 0 0 30px #b95eff;
+    margin-top:-10px;
+    transform:skewY(-5deg);
+    animation:title2Slide 1.2s cubic-bezier(0.2, 1.5, 0.4, 1) 1s both;
+  }
+  @keyframes title2Slide {
+    0% { transform:translateX(-400px) skewY(-5deg); opacity:0; }
+    100% { transform:translateX(0) skewY(-5deg); opacity:1; }
+  }
+  
+  .logo-star {
+    position:absolute; top:-60px; left:50%;
+    transform:translateX(-50%);
+    font-size:70px;
+    filter:drop-shadow(0 0 30px #b95eff) drop-shadow(0 0 60px #7a2ecf);
+    animation:starSpin 3s linear infinite;
+  }
+  @keyframes starSpin {
+    0% { transform:translateX(-50%) rotate(0deg) scale(1); }
+    50% { transform:translateX(-50%) rotate(180deg) scale(1.15); }
+    100% { transform:translateX(-50%) rotate(360deg) scale(1); }
+  }
+  
+  .intro-author {
+    margin-top:20px;
+    font-family:'Bangers', cursive;
+    font-size:16px;
+    color:rgba(255,255,255,0.6);
+    letter-spacing:3px;
+    text-shadow:0 0 15px rgba(185,94,255,0.8);
+    animation:hintBlink 2s ease-in-out infinite;
+  }
+  
+  .tap-button {
+    position:relative; z-index:5;
+    margin-top:40px;
+    background:linear-gradient(180deg, #b95eff 0%, #7a2ecf 100%);
+    border:none; border-radius:50px;
+    padding:22px 80px;
+    font-family:'Bangers', cursive;
+    font-size:clamp(28px, 5vw, 42px);
+    color:#fff;
+    letter-spacing:6px;
+    text-shadow:3px 3px 0 rgba(0,0,0,0.4);
+    cursor:pointer;
+    box-shadow:0 10px 0 #3a0a6a, 0 15px 30px rgba(0,0,0,0.6), inset 0 3px 0 rgba(255,255,255,0.5);
+    animation:tapPulse 1.5s ease-in-out infinite, tapAppear 0.8s cubic-bezier(0.2, 1.5, 0.4, 1) 1.4s both;
+    transition:transform 0.08s;
+  }
+  @keyframes tapAppear {
+    0% { transform:scale(0) rotate(-180deg); opacity:0; }
+    100% { transform:scale(1) rotate(0); opacity:1; }
+  }
+  @keyframes tapPulse {
+    0%,100% { 
+      transform:scale(1);
+      box-shadow:0 10px 0 #3a0a6a, 0 15px 30px rgba(0,0,0,0.6), inset 0 3px 0 rgba(255,255,255,0.5), 0 0 0 0 rgba(185,94,255,0.7);
+    }
+    50% { 
+      transform:scale(1.05);
+      box-shadow:0 10px 0 #3a0a6a, 0 15px 30px rgba(0,0,0,0.6), inset 0 3px 0 rgba(255,255,255,0.5), 0 0 0 20px rgba(185,94,255,0);
+    }
+  }
+  .tap-button:active {
+    transform:translateY(6px);
+    box-shadow:0 4px 0 #3a0a6a, 0 8px 15px rgba(0,0,0,0.6);
+  }
+  
+  .tap-hint {
+    position:absolute; bottom:50px; left:50%;
+    transform:translateX(-50%);
+    font-family:'Fredoka', sans-serif;
+    font-size:14px;
+    color:rgba(255,255,255,0.6);
+    letter-spacing:3px;
+    animation:hintBlink 1.5s ease-in-out infinite;
+    z-index:5;
+  }
+  @keyframes hintBlink { 0%,100% { opacity:0.4; } 50% { opacity:1; } }
+  
+  .flying-star {
+    position:absolute; font-size:30px;
+    pointer-events:none; z-index:3;
+    filter:drop-shadow(0 0 15px #b95eff);
+  }
+  
+  #game {
+    position:relative;
+    width:100vw; height:100vh;
+    overflow:hidden; background:#1a3a2a;
+    opacity:0;
+    transition:opacity 0.6s;
+    cursor:crosshair;
+  }
+  #game.active { opacity:1; }
+  
+  #canvas3d {
+    position:absolute;
+    inset:0;
+    width:100%; height:100%;
+    display:block;
+  }
+  
+  /* ============ BACK BUTTON ============ */
+  .back-game-btn {
+    position:absolute;
+    top:10px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:160;
+    background:linear-gradient(180deg, #ff6b6b, #b02020);
+    border:3px solid #ffd0d0;
+    border-radius:14px;
+    padding:8px 22px;
+    font-family:'Bangers', cursive;
+    font-size:18px;
+    color:#fff;
+    letter-spacing:2px;
+    text-shadow:2px 2px 0 rgba(0,0,0,0.4);
+    cursor:pointer;
+    box-shadow:0 4px 0 #6b1010, 0 0 20px rgba(255,60,60,0.4);
+    transition:transform 0.08s;
+    display:none;
+  }
+  .back-game-btn.show { display:block; }
+  .back-game-btn:active {
+    transform:translateX(-50%) translateY(4px);
+    box-shadow:0 1px 0 #6b1010;
+  }
+  
+  /* ============ TIMER ============ */
+  .timer-hud {
+    position:absolute;
+    top:10px; left:50%;
+    transform:translateX(-50%);
+    z-index:105;
+    background:linear-gradient(180deg, #2a3f5f 0%, #1a2a42 100%);
+    border:3px solid #4dd66d;
+    border-radius:14px;
+    padding:6px 20px;
+    display:flex; align-items:center; gap:8px;
+    box-shadow:0 4px 0 #0a1220, 0 0 20px rgba(80,255,120,0.4);
+    pointer-events:none;
+    transition:all 0.3s;
+  }
+  .timer-hud.warning {
+    border-color:#ffaa00;
+    box-shadow:0 4px 0 #0a1220, 0 0 20px rgba(255,170,0,0.6);
+    animation:timerWarn 1s ease-in-out infinite;
+  }
+  .timer-hud.danger {
+    border-color:#ff3a3a;
+    box-shadow:0 4px 0 #0a1220, 0 0 30px rgba(255,60,60,0.8);
+    animation:timerWarn 0.5s ease-in-out infinite;
+  }
+  @keyframes timerWarn {
+    0%,100% { transform:translateX(-50%) scale(1); }
+    50% { transform:translateX(-50%) scale(1.08); }
+  }
+  .timer-icon {
+    font-size:20px;
+    filter:drop-shadow(0 0 6px #4dd66d);
+  }
+  .timer-value {
+    font-family:'Bangers', cursive;
+    font-size:26px;
+    color:#4dd66d;
+    text-shadow:2px 2px 0 #0a3a1a, 0 0 10px #4dd66d;
+    letter-spacing:2px;
+    min-width:70px;
+    text-align:center;
+  }
+  .timer-hud.warning .timer-value { color:#ffaa00; text-shadow:2px 2px 0 #4a2a00, 0 0 10px #ffaa00; }
+  .timer-hud.danger .timer-value { color:#ff3a3a; text-shadow:2px 2px 0 #4a0000, 0 0 10px #ff3a3a; }
+  .timer-hud.warning .timer-icon { filter:drop-shadow(0 0 6px #ffaa00); }
+  .timer-hud.danger .timer-icon { filter:drop-shadow(0 0 6px #ff3a3a); }
+  
+  .hud {
+    position:absolute;
+    top:60px; left:50%;
+    transform:translateX(-50%);
+    display:flex; gap:12px;
+    z-index:100;
+    pointer-events:none;
+    align-items:center;
+  }
+  .hud-card {
+    background:linear-gradient(180deg, #2a3f5f 0%, #1a2a42 100%);
+    border:3px solid #b95eff;
+    border-radius:14px;
+    padding:6px 18px;
+    box-shadow:0 4px 0 #0a1220, 0 0 15px rgba(185,94,255,0.3);
+    display:flex; align-items:center; gap:10px;
+  }
+  .hud-label {
+    font-family:'Bangers', cursive;
+    font-size:16px;
+    color:#e0c0ff;
+    letter-spacing:1px;
+    text-shadow:2px 2px 0 #3a0050;
+  }
+  .hud-score {
+    font-family:'Bangers', cursive;
+    font-size:28px;
+    color:#b95eff;
+    text-shadow:2px 2px 0 #4a1a8a, 0 0 10px #b95eff;
+  }
+  .hud-star { font-size:24px; filter:drop-shadow(0 0 6px #b95eff); }
+  
+  .lives-hud {
+    position:absolute;
+    top:60px; right:12px;
+    display:flex; gap:6px;
+    background:linear-gradient(180deg, #4a1a1a, #2a0808);
+    border:3px solid #ff6b6b;
+    border-radius:14px;
+    padding:8px 14px;
+    box-shadow:0 4px 0 #200808, 0 0 20px rgba(255,80,80,0.4);
+    z-index:100;
+    pointer-events:none;
+    align-items:center;
+  }
+  .lives-hud-label {
+    font-family:'Bangers', cursive;
+    font-size:14px;
+    color:#ffd0d0;
+    letter-spacing:1px;
+    margin-right:4px;
+    text-shadow:2px 2px 0 #4a0000;
+  }
+  .life-heart {
+    font-size:24px;
+    transition:all 0.3s;
+    filter:drop-shadow(0 0 5px #ff3a3a);
+  }
+  .life-heart.lost {
+    opacity:0.2;
+    filter:grayscale(1);
+  }
+  
+  .player-hud {
+    position:absolute;
+    top:60px; left:12px;
+    display:flex; align-items:center; gap:10px;
+    background:linear-gradient(180deg, #2a3f5f 0%, #1a2a42 100%);
+    border:3px solid #b95eff;
+    border-radius:14px;
+    padding:5px 14px 5px 5px;
+    box-shadow:0 4px 0 #0a1220, 0 0 20px rgba(185,94,255,0.3);
+    z-index:100;
+    pointer-events:none;
+  }
+  .player-hud-avatar {
+    width:44px; height:44px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:24px;
+    border:2px solid #e0c0ff;
+  }
+  .player-hud-meta { display:flex; flex-direction:column; }
+  .player-hud-name {
+    font-family:'Bangers', cursive;
+    font-size:16px;
+    color:#e0c0ff;
+    letter-spacing:1px;
+    line-height:1;
+    text-shadow:2px 2px 0 #3a0050;
+  }
+  .player-hud-trophies {
+    font-family:'Bangers', cursive;
+    font-size:14px;
+    color:#b95eff;
+    line-height:1;
+    margin-top:2px;
+  }
+  
+  .stage-hud {
+    position:absolute;
+    top:120px; left:50%;
+    transform:translateX(-50%);
+    font-family:'Bangers', cursive;
+    font-size:22px;
+    color:#ffd966;
+    letter-spacing:4px;
+    text-shadow:3px 3px 0 #3a0050, 0 0 20px #ffd966;
+    z-index:100;
+    pointer-events:none;
+    background:linear-gradient(180deg, rgba(74,26,138,0.9), rgba(42,10,80,0.9));
+    border:3px solid #ffd966;
+    border-radius:20px;
+    padding:4px 24px;
+    box-shadow:0 0 20px rgba(255,215,100,0.5);
+  }
+  
+  .super-meter {
+    position:absolute;
+    bottom:30px; right:30px;
+    display:flex; align-items:center; gap:10px;
+    z-index:100;
+    background:linear-gradient(180deg, #2a3f5f 0%, #1a2a42 100%);
+    border:3px solid #b95eff;
+    border-radius:50px;
+    padding:8px 18px 8px 10px;
+    box-shadow:0 5px 0 #0a1220, 0 0 20px rgba(185,94,255,0.4);
+  }
+  .super-icon {
+    width:40px; height:40px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #d9a0ff, #7a2ecf);
+    border:3px solid #e0c0ff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px;
+  }
+  .super-icon.ready { animation:superPulse 0.7s ease-in-out infinite; }
+  @keyframes superPulse {
+    0%,100% { box-shadow:inset 0 -4px 0 rgba(0,0,0,0.2), 0 0 15px rgba(185,94,255,0.6); }
+    50% { box-shadow:0 0 40px rgba(185,94,255,1), 0 0 80px rgba(150,60,220,0.8); }
+  }
+  .super-meter-bg {
+    width:140px; height:20px;
+    background:#0f121b;
+    border-radius:20px;
+    border:2px solid #b95eff;
+    overflow:hidden;
+    box-shadow:inset 0 2px 6px black;
+  }
+  .super-meter-fill {
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg, #7a2ecf, #b95eff, #e0c0ff);
+    border-radius:20px;
+    box-shadow:0 0 15px #b95eff;
+    transition:width 0.3s;
+  }
+  
+  .answer-overlay {
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.78);
+    backdrop-filter:blur(5px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:200;
+    flex-direction:column;
+    gap:16px;
+    padding:20px;
+    overflow-y:auto;
+  }
+  .answer-overlay.show { display:flex; }
+  
+  .answer-enemy-show {
+    display:flex; align-items:center; gap:12px;
+    background:linear-gradient(180deg, #3a1a5a, #1a0a2a);
+    border:3px solid #b95eff;
+    border-radius:16px;
+    padding:6px 20px 6px 6px;
+    box-shadow:0 4px 0 #0a0020, 0 0 20px rgba(185,94,255,0.5);
+    flex-direction:column;
+  }
+  .answer-enemy-row {
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .answer-enemy-avatar {
+    width:52px; height:52px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:30px;
+    border:3px solid;
+  }
+  .answer-enemy-name {
+    font-family:'Bangers', cursive;
+    font-size:22px;
+    color:#e0c0ff;
+    letter-spacing:2px;
+    text-shadow:2px 2px 0 #3a0050;
+  }
+  .answer-enemy-hits {
+    display:flex;
+    gap:4px;
+    padding:4px 0 0;
+  }
+  .answer-hit-star {
+    font-size:18px;
+    opacity:0.25;
+    transition:all 0.3s;
+  }
+  .answer-hit-star.filled {
+    opacity:1;
+    filter:drop-shadow(0 0 6px #4dd66d);
+  }
+  
+  .task-type-badge {
+    font-family:'Bangers', cursive;
+    font-size:13px;
+    padding:4px 18px;
+    border-radius:20px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    border:2px solid;
+    background:rgba(185,94,255,0.15);
+    color:#b95eff;
+    border-color:#b95eff;
+    margin-bottom:-4px;
+  }
+  
+  .answer-question {
+    background:linear-gradient(180deg, #f0e0ff, #d9b0ff);
+    border:5px solid #4a1a8a;
+    border-radius:20px;
+    padding:14px 40px;
+    box-shadow:0 8px 0 #2a0050, 0 0 30px rgba(185,94,255,0.6);
+    font-family:'Fredoka', 'Cambria Math', 'Times New Roman', serif;
+    font-weight:700;
+    font-size:44px;
+    color:#1a0030;
+    letter-spacing:1px;
+    text-align:center;
+    max-width:90vw;
+    line-height:1.5;
+  }
+  
+  .answer-hint {
+    color:#b95eff;
+    font-family:'Fredoka', sans-serif;
+    font-size:14px;
+    letter-spacing:2px;
+    text-align:center;
+    text-shadow:1px 1px 3px black;
+    background:rgba(0,0,0,0.5);
+    padding:6px 18px;
+    border-radius:20px;
+    border:1px solid rgba(185,94,255,0.4);
+  }
+  
+  .answer-grid {
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:12px;
+    width:min(90vw, 620px);
+  }
+  .answer-btn {
+    background:linear-gradient(180deg, #8a5acf 0%, #5a2a9f 100%);
+    border:none;
+    border-radius:16px;
+    padding:16px 8px;
+    font-family:'Fredoka', 'Cambria Math', 'Times New Roman', serif;
+    font-weight:700;
+    font-size:26px;
+    color:#fff;
+    letter-spacing:1px;
+    text-shadow:2px 2px 0 rgba(0,0,0,0.4);
+    cursor:pointer;
+    box-shadow:0 7px 0 #2a0a5a, 0 10px 15px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,255,255,0.4);
+    transition:all 0.08s;
+    min-height:64px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    word-break:break-word;
+  }
+  .answer-btn:active {
+    transform:translateY(5px);
+    box-shadow:0 2px 0 #2a0a5a;
+  }
+  .answer-btn.correct {
+    background:linear-gradient(180deg, #4dd66d, #2ba84a);
+    box-shadow:0 7px 0 #1a6b30, 0 0 30px rgba(80,255,120,0.8);
+  }
+  .answer-btn.wrong {
+    background:linear-gradient(180deg, #e05050, #b02020);
+    box-shadow:0 7px 0 #6b1010, 0 0 30px rgba(255,60,60,0.8);
+  }
+  
+  .math-frac {
+    display:inline-flex;
+    flex-direction:column;
+    align-items:center;
+    vertical-align:middle;
+    margin:0 6px;
+    font-size:0.7em;
+    line-height:1.15;
+    position:relative;
+    top:-0.05em;
+  }
+  .math-frac .num {
+    border-bottom:2.5px solid currentColor;
+    padding:0 8px 3px 8px;
+    min-width:1.2em;
+    text-align:center;
+  }
+  .math-frac .den {
+    padding:3px 8px 0 8px;
+    min-width:1.2em;
+    text-align:center;
+  }
+  .math-power {
+    display:inline-block;
+    vertical-align:super;
+    font-size:0.62em;
+    margin-left:1px;
+    line-height:1;
+    position:relative;
+    top:-0.15em;
+  }
+  .math-sqrt {
+    display:inline-flex;
+    align-items:flex-start;
+    position:relative;
+    vertical-align:middle;
+    margin:0 2px;
+  }
+  .math-sqrt .sqrt-symbol {
+    font-size:1.35em;
+    line-height:1;
+    position:relative;
+    top:0.08em;
+    margin-right:-0.05em;
+  }
+  .math-sqrt .radicand {
+    border-top:2.5px solid currentColor;
+    padding:3px 6px 0 4px;
+    margin-left:-0.15em;
+    margin-top:0.08em;
+    line-height:1.1;
+  }
+  .math-mixed {
+    display:inline-flex;
+    align-items:center;
+    vertical-align:middle;
+    margin:0 3px;
+  }
+  .math-mixed .whole {
+    font-size:1em;
+    margin-right:2px;
+  }
+  .answer-btn .math-frac { font-size:0.75em; }
+  .answer-btn .math-sqrt .sqrt-symbol { font-size:1.3em; }
+  
+  .combo-display {
+    position:absolute;
+    top:170px; left:50%;
+    transform:translateX(-50%);
+    font-family:'Bangers', cursive;
+    font-size:36px;
+    color:#b95eff;
+    text-shadow:3px 3px 0 #3a0050, 0 0 20px #b95eff;
+    z-index:150;
+    opacity:0;
+    transition:opacity 0.3s;
+    pointer-events:none;
+    letter-spacing:3px;
+  }
+  .combo-display.show { opacity:1; animation:comboPop 0.5s; }
+  @keyframes comboPop {
+    0% { transform:translateX(-50%) scale(0.5); }
+    50% { transform:translateX(-50%) scale(1.2); }
+    100% { transform:translateX(-50%) scale(1); }
+  }
+  
+  .feedback {
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%, -50%) scale(0);
+    font-family:'Bangers', cursive;
+    font-size:90px;
+    color:#fff;
+    text-shadow:4px 4px 0 #000, 0 0 30px currentColor;
+    z-index:250;
+    pointer-events:none;
+    opacity:0;
+  }
+  .feedback.show { animation:feedbackPop 0.8s ease forwards; }
+  @keyframes feedbackPop {
+    0% { transform:translate(-50%, -50%) scale(0) rotate(-20deg); opacity:0; }
+    30% { transform:translate(-50%, -50%) scale(1.3) rotate(5deg); opacity:1; }
+    60% { transform:translate(-50%, -50%) scale(1); opacity:1; }
+    100% { transform:translate(-50%, -120%) scale(1); opacity:0; }
+  }
+  
+  .stage-transition-overlay {
+    position:absolute;
+    inset:0;
+    background:radial-gradient(circle, rgba(80,40,140,0.95), rgba(0,0,0,0.98));
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:30px;
+    z-index:280;
+    padding:20px;
+    pointer-events:none;
+  }
+  .stage-transition-overlay.show {
+    display:flex;
+    animation:stageFadeIn 0.8s ease;
+    pointer-events:auto;
+  }
+  @keyframes stageFadeIn {
+    0% { opacity:0; }
+    100% { opacity:1; }
+  }
+  
+  .stage-transition-title {
+    font-family:'Bangers', cursive;
+    font-size:clamp(50px, 11vw, 120px);
+    color:#ffd966;
+    text-shadow:5px 5px 0 #4a1a8a, 0 0 60px #ffd966;
+    letter-spacing:8px;
+    text-align:center;
+    animation:stageTitlePop 0.8s cubic-bezier(0.2, 1.5, 0.4, 1);
+  }
+  @keyframes stageTitlePop {
+    0% { transform:scale(0) rotate(-20deg); opacity:0; }
+    100% { transform:scale(1) rotate(0); opacity:1; }
+  }
+  
+  .stage-transition-subtitle {
+    font-family:'Fredoka', sans-serif;
+    font-weight:700;
+    font-size:clamp(18px, 3vw, 28px);
+    color:#e0c0ff;
+    letter-spacing:4px;
+    text-align:center;
+    animation:msgSlide 0.8s cubic-bezier(0.2, 1.5, 0.4, 1) 0.3s both;
+  }
+  
+  .stage-transition-icon {
+    font-size:80px;
+    filter:drop-shadow(0 0 30px #ffd966);
+    animation:stageIconBounce 1.5s ease-in-out infinite;
+  }
+  @keyframes stageIconBounce {
+    0%,100% { transform:translateY(0) scale(1); }
+    50% { transform:translateY(-20px) scale(1.1); }
+  }
+  
+  .door-notification {
+    position:absolute;
+    top:190px; left:50%;
+    transform:translateX(-50%) translateY(-30px);
+    background:linear-gradient(180deg, #ffd966, #e8a800);
+    border:4px solid #4a1a8a;
+    border-radius:20px;
+    padding:12px 30px;
+    font-family:'Bangers', cursive;
+    font-size:24px;
+    color:#2a0050;
+    letter-spacing:3px;
+    text-shadow:2px 2px 0 rgba(255,255,255,0.4);
+    box-shadow:0 8px 0 #3a0a6a, 0 0 40px rgba(255,215,100,0.8);
+    z-index:180;
+    pointer-events:none;
+    opacity:0;
+    transition:all 0.5s;
+  }
+  .door-notification.show {
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+    animation:doorNoticePulse 1.5s ease-in-out infinite;
+  }
+  @keyframes doorNoticePulse {
+    0%,100% { box-shadow:0 8px 0 #3a0a6a, 0 0 40px rgba(255,215,100,0.8); }
+    50% { box-shadow:0 8px 0 #3a0a6a, 0 0 80px rgba(255,215,100,1); }
+  }
+  
+  .gameover-overlay {
+    position:absolute;
+    inset:0;
+    background:radial-gradient(circle, rgba(0,0,0,0.9), rgba(0,0,0,0.98));
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:30px;
+    z-index:300;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.5s;
+    padding:20px;
+  }
+  .gameover-overlay.show { opacity:1; pointer-events:auto; }
+  
+  .gameover-overlay.win-bg {
+    background:radial-gradient(circle, rgba(40,20,60,0.95), rgba(0,0,0,0.98));
+  }
+  .gameover-overlay.lose-bg {
+    background:radial-gradient(circle, rgba(60,10,10,0.95), rgba(0,0,0,0.98));
+  }
+  
+  .gameover-title {
+    font-family:'Bangers', cursive;
+    font-size:clamp(44px, 9vw, 90px);
+    color:#b95eff;
+    text-shadow:5px 5px 0 #4a1a8a, 0 0 50px #b95eff;
+    letter-spacing:6px;
+    text-align:center;
+    line-height:1.1;
+    animation:titlePop 0.6s cubic-bezier(0.2, 1.5, 0.4, 1);
+  }
+  .gameover-title.lose {
+    color:#ff6b6b;
+    text-shadow:5px 5px 0 #4a0000, 0 0 50px #ff3a3a;
+  }
+  @keyframes titlePop {
+    0% { transform:scale(0) rotate(-15deg); }
+    100% { transform:scale(1) rotate(0); }
+  }
+  
+  .gameover-message {
+    font-family:'Fredoka', sans-serif;
+    font-weight:500;
+    font-size:clamp(16px, 3vw, 24px);
+    color:#e0e8f0;
+    letter-spacing:2px;
+    text-align:center;
+    max-width:600px;
+    line-height:1.5;
+    animation:msgSlide 0.8s cubic-bezier(0.2, 1.5, 0.4, 1) 0.3s both;
+  }
+  @keyframes msgSlide {
+    0% { opacity:0; transform:translateY(30px); }
+    100% { opacity:1; transform:translateY(0); }
+  }
+  
+  .gameover-score {
+    font-family:'Bangers', cursive;
+    font-size:clamp(24px, 4vw, 38px);
+    color:#b95eff;
+    text-shadow:3px 3px 0 #4a1a8a, 0 0 20px #b95eff;
+    letter-spacing:3px;
+    animation:msgSlide 0.8s cubic-bezier(0.2, 1.5, 0.4, 1) 0.5s both;
+  }
+  
+  .gameover-stars {
+    font-size:52px;
+    letter-spacing:12px;
+    filter:drop-shadow(0 0 20px #b95eff);
+    animation:starsSlide 0.8s cubic-bezier(0.2, 1.5, 0.4, 1) 0.4s both;
+  }
+  @keyframes starsSlide {
+    0% { opacity:0; transform:scale(0.3) rotate(-30deg); }
+    100% { opacity:1; transform:scale(1) rotate(0); }
+  }
+  
+  .gameover-buttons {
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+  
+  .play-again-btn, .back-menu-btn {
+    border:none;
+    border-radius:20px;
+    padding:18px 45px;
+    font-family:'Bangers', cursive;
+    font-size:28px;
+    color:#fff;
+    letter-spacing:4px;
+    text-shadow:3px 3px 0 rgba(0,0,0,0.3);
+    cursor:pointer;
+    transition:0.1s;
+    animation:msgSlide 0.8s cubic-bezier(0.2, 1.5, 0.4, 1) 0.6s both;
+  }
+  .play-again-btn {
+    background:linear-gradient(180deg, #b95eff, #7a2ecf);
+    box-shadow:0 8px 0 #3a0a6a, 0 12px 20px rgba(0,0,0,0.5);
+  }
+  .back-menu-btn {
+    background:linear-gradient(180deg, #5a5a7a, #3a3a5a);
+    box-shadow:0 8px 0 #1a1a2a, 0 12px 20px rgba(0,0,0,0.5);
+  }
+  .play-again-btn:active { transform:translateY(5px); box-shadow:0 3px 0 #3a0a6a; }
+  .back-menu-btn:active { transform:translateY(5px); box-shadow:0 3px 0 #1a1a2a; }
+  
+  .confetti {
+    position:absolute;
+    width:10px; height:20px;
+    top:-30px;
+    pointer-events:none;
+    z-index:290;
+    animation:confettiFall linear forwards;
+  }
+  @keyframes confettiFall {
+    0% { transform:translateY(0) rotate(0deg); opacity:1; }
+    100% { transform:translateY(110vh) rotate(720deg); opacity:0.6; }
+  }
+  
+  .instructions {
+    position:absolute;
+    bottom:20px; left:20px;
+    font-family:'Fredoka', sans-serif;
+    font-size:12px;
+    color:rgba(255,255,255,0.8);
+    z-index:100;
+    pointer-events:none;
+    text-shadow:1px 1px 2px black;
+    line-height:1.6;
+    max-width:240px;
+    background:rgba(0,0,0,0.5);
+    padding:10px 14px;
+    border-radius:10px;
+    border:2px solid rgba(185,94,255,0.3);
+  }
+  .instructions b { color:#b95eff; }
+  
+  .grade-select-overlay {
+    position:absolute;
+    inset:0;
+    background:radial-gradient(circle, rgba(30,20,50,0.98), rgba(0,0,0,0.99));
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:20px;
+    z-index:450;
+    padding:20px;
+    overflow-y:auto;
+  }
+  .grade-select-overlay.show {
+    display:flex;
+    animation:selectFadeIn 0.5s;
+  }
+  @keyframes selectFadeIn {
+    0% { opacity:0; transform:scale(0.9); }
+    100% { opacity:1; transform:scale(1); }
+  }
+  
+  .grade-select-title {
+    font-family:'Bangers', cursive;
+    font-size:clamp(36px, 7vw, 64px);
+    color:#b95eff;
+    text-shadow:4px 4px 0 #4a1a8a, 0 0 40px #b95eff;
+    letter-spacing:6px;
+    text-align:center;
+    animation:titlePop 0.6s cubic-bezier(0.2, 1.5, 0.4, 1);
+  }
+  .grade-select-subtitle {
+    font-family:'Fredoka', sans-serif;
+    font-size:15px;
+    color:#c9b0e0;
+    letter-spacing:2px;
+    text-align:center;
+    margin-top:-10px;
+  }
+  
+  .grade-grid {
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:16px;
+    width:min(90vw, 500px);
+  }
+  .grade-card {
+    background:linear-gradient(180deg, #3a2a5a 0%, #1a0a2a 100%);
+    border:4px solid #6a5a8a;
+    border-radius:20px;
+    padding:20px 16px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    cursor:pointer;
+    transition:all 0.15s;
+    box-shadow:0 8px 0 #0a0010;
+  }
+  .grade-card:hover {
+    transform:translateY(-4px);
+    box-shadow:0 12px 0 #0a0010, 0 0 30px rgba(185,94,255,0.6);
+  }
+  .grade-card:active {
+    transform:translateY(2px);
+    box-shadow:0 4px 0 #0a0010;
+  }
+  .grade-card-emoji {
+    font-size:48px;
+    filter:drop-shadow(0 0 10px #b95eff);
+  }
+  .grade-card-name {
+    font-family:'Bangers', cursive;
+    font-size:32px;
+    color:#e0c0ff;
+    letter-spacing:3px;
+    text-shadow:3px 3px 0 #000;
+  }
+  .grade-card-desc {
+    font-family:'Fredoka', sans-serif;
+    font-size:12px;
+    color:#b95eff;
+    letter-spacing:1px;
+  }
+  
+  .topic-select-overlay {
+    position:absolute;
+    inset:0;
+    background:radial-gradient(circle, rgba(30,20,50,0.98), rgba(0,0,0,0.99));
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:18px;
+    z-index:460;
+    padding:20px;
+    overflow-y:auto;
+  }
+  .topic-select-overlay.show {
+    display:flex;
+    animation:selectFadeIn 0.5s;
+  }
+  .topic-select-title {
+    font-family:'Bangers', cursive;
+    font-size:clamp(28px, 5vw, 48px);
+    color:#b95eff;
+    text-shadow:4px 4px 0 #4a1a8a, 0 0 40px #b95eff;
+    letter-spacing:4px;
+    text-align:center;
+  }
+  .topic-select-grade-badge {
+    font-family:'Bangers', cursive;
+    font-size:20px;
+    color:#ffd966;
+    background:rgba(255,215,100,0.15);
+    border:2px solid #ffd966;
+    border-radius:20px;
+    padding:6px 24px;
+    letter-spacing:2px;
+  }
+  .topic-list {
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    width:min(90vw, 560px);
+  }
+  .topic-card {
+    background:linear-gradient(180deg, #3a2a5a 0%, #1a0a2a 100%);
+    border:3px solid #6a5a8a;
+    border-radius:16px;
+    padding:16px 20px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    cursor:pointer;
+    transition:all 0.15s;
+    box-shadow:0 6px 0 #0a0010;
+  }
+  .topic-card:hover {
+    transform:translateY(-3px);
+    box-shadow:0 9px 0 #0a0010, 0 0 25px rgba(185,94,255,0.5);
+    border-color:#b95eff;
+  }
+  .topic-card:active {
+    transform:translateY(2px);
+    box-shadow:0 3px 0 #0a0010;
+  }
+  .topic-card-icon {
+    font-size:32px;
+    width:50px;
+    text-align:center;
+    filter:drop-shadow(0 0 8px #b95eff);
+  }
+  .topic-card-info {
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+  }
+  .topic-card-name {
+    font-family:'Fredoka', sans-serif;
+    font-weight:700;
+    font-size:16px;
+    color:#e0c0ff;
+    letter-spacing:1px;
+  }
+  .topic-card-count {
+    font-family:'Fredoka', sans-serif;
+    font-size:12px;
+    color:#b95eff;
+    letter-spacing:1px;
+  }
+  
+  .back-btn {
+    background:linear-gradient(180deg, #5a5a7a, #3a3a5a);
+    border:none;
+    border-radius:16px;
+    padding:12px 40px;
+    font-family:'Bangers', cursive;
+    font-size:22px;
+    color:#fff;
+    letter-spacing:3px;
+    cursor:pointer;
+    box-shadow:0 6px 0 #1a1a2a;
+    transition:0.1s;
+    margin-top:8px;
+  }
+  .back-btn:active {
+    transform:translateY(4px);
+    box-shadow:0 2px 0 #1a1a2a;
+  }
+  
+  .select-overlay {
+    position:absolute;
+    inset:0;
+    background:radial-gradient(circle, rgba(30,20,50,0.95), rgba(0,0,0,0.98));
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:18px;
+    z-index:400;
+    padding:20px;
+    overflow-y:auto;
+  }
+  .select-overlay.show {
+    display:flex;
+    animation:selectFadeIn 0.5s;
+  }
+  
+  .select-title {
+    font-family:'Bangers', cursive;
+    font-size:clamp(36px, 7vw, 64px);
+    color:#b95eff;
+    text-shadow:4px 4px 0 #4a1a8a, 0 0 40px #b95eff;
+    letter-spacing:6px;
+    text-align:center;
+    animation:titlePop 0.6s cubic-bezier(0.2, 1.5, 0.4, 1);
+  }
+  .select-subtitle {
+    font-family:'Fredoka', sans-serif;
+    font-size:15px;
+    color:#c9b0e0;
+    letter-spacing:2px;
+    text-align:center;
+    margin-top:-10px;
+  }
+  
+  .topics-panel {
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    justify-content:center;
+    max-width:min(90vw, 720px);
+    background:rgba(0,0,0,0.4);
+    padding:12px 20px;
+    border-radius:14px;
+    border:2px solid rgba(185,94,255,0.3);
+  }
+  .topic-chip {
+    font-family:'Fredoka', sans-serif;
+    font-size:12px;
+    font-weight:700;
+    padding:6px 14px;
+    border-radius:20px;
+    letter-spacing:1px;
+    border:2px solid;
+    background:rgba(185,94,255,0.15);
+    color:#b95eff;
+    border-color:#b95eff;
+  }
+  
+  .map-info {
+    font-family:'Fredoka', sans-serif;
+    font-size:13px;
+    color:#d9b0ff;
+    letter-spacing:2px;
+    background:rgba(0,0,0,0.4);
+    padding:6px 18px;
+    border-radius:20px;
+    border:1px solid rgba(185,94,255,0.4);
+    margin-top:-4px;
+  }
+  .map-info span { color:#ffd966; font-weight:700; }
+  
+  .brawler-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(120px, 1fr));
+    gap:12px;
+    width:min(90vw, 720px);
+  }
+  .brawler-card {
+    background:linear-gradient(180deg, #3a2a5a 0%, #1a0a2a 100%);
+    border:3px solid #6a5a8a;
+    border-radius:16px;
+    padding:12px 8px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    cursor:pointer;
+    transition:all 0.15s;
+    box-shadow:0 6px 0 #0a0010;
+  }
+  .brawler-card:hover {
+    transform:translateY(-3px);
+    box-shadow:0 9px 0 #0a0010, 0 0 25px rgba(185,94,255,0.5);
+  }
+  .brawler-card.selected {
+    border-color:#b95eff;
+    box-shadow:0 9px 0 #0a0010, 0 0 30px rgba(185,94,255,0.9);
+    transform:translateY(-3px);
+    background:linear-gradient(180deg, #5a4a7a 0%, #2a1a4a 100%);
+  }
+  .brawler-card-avatar {
+    width:60px; height:60px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:34px;
+    border:3px solid;
+    box-shadow:inset 0 -4px 0 rgba(0,0,0,0.3);
+  }
+  .brawler-card-name {
+    font-family:'Bangers', cursive;
+    font-size:18px;
+    color:#e0c0ff;
+    letter-spacing:1px;
+    text-shadow:2px 2px 0 #000;
+  }
+  .brawler-card-rarity {
+    font-family:'Fredoka', sans-serif;
+    font-size:11px;
+    letter-spacing:1px;
+    font-weight:bold;
+    text-transform:uppercase;
+  }
+  .start-battle-btn {
+    background:linear-gradient(180deg, #b95eff, #7a2ecf);
+    border:none;
+    border-radius:20px;
+    padding:18px 60px;
+    font-family:'Bangers', cursive;
+    font-size:32px;
+    color:#fff;
+    letter-spacing:4px;
+    text-shadow:2px 2px 0 rgba(0,0,0,0.3);
+    cursor:pointer;
+    box-shadow:0 8px 0 #3a0a6a, 0 12px 25px rgba(0,0,0,0.6);
+    transition:0.1s;
+    margin-top:6px;
+    animation:tapPulse 1.5s ease-in-out infinite;
+  }
+  .start-battle-btn:active {
+    transform:translateY(6px);
+    box-shadow:0 2px 0 #3a0a6a;
+  }
+  
+  .loading-3d {
+    position:absolute;
+    inset:0;
+    background:radial-gradient(circle, #2a1a5a, #000);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:500;
+    flex-direction:column;
+    gap:20px;
+  }
+  .loading-3d.show { display:flex; }
+  .loading-spinner {
+    width:80px; height:80px;
+    border:6px solid rgba(185,94,255,0.3);
+    border-top-color:#b95eff;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .loading-text {
+    font-family:'Bangers', cursive;
+    font-size:32px;
+    color:#b95eff;
+    letter-spacing:4px;
+    text-shadow:0 0 20px #b95eff;
+    animation:hintBlink 1.5s ease-in-out infinite;
+  }
+  
+  .compass {
+    position:absolute;
+    top:160px; right:20px;
+    width:80px; height:80px;
+    border-radius:50%;
+    background:rgba(0,0,0,0.6);
+    border:3px solid #b95eff;
+    z-index:100;
+    pointer-events:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 0 20px rgba(185,94,255,0.4);
+  }
+  .compass-needle {
+    width:6px; height:35px;
+    background:linear-gradient(180deg, #ff3a3a 50%, #ffffff 50%);
+    border-radius:3px;
+    transform-origin:center center;
+    box-shadow:0 0 8px rgba(255,60,60,0.6);
+  }
+  
+  .minimap-container {
+    position:absolute;
+    top:160px; left:20px;
+    width:140px; height:140px;
+    border-radius:12px;
+    background:rgba(0,0,0,0.7);
+    border:3px solid #b95eff;
+    z-index:100;
+    pointer-events:none;
+    overflow:hidden;
+    box-shadow:0 0 20px rgba(185,94,255,0.4);
+  }
+  .minimap-canvas {
+    width:100%; height:100%;
+  }
+  
+  .mobile-controls {
+    position:absolute;
+    bottom:30px; left:30px;
+    z-index:150;
+    display:none;
+    gap:8px;
+    flex-direction:column;
+    align-items:center;
+  }
+  .mobile-controls.show { display:flex; }
+  
+  .mobile-row {
+    display:flex;
+    gap:8px;
+  }
+  
+  .mobile-btn {
+    width:60px; height:60px;
+    border-radius:50%;
+    background:linear-gradient(180deg, #8a5acf, #5a2a9f);
+    border:3px solid #e0c0ff;
+    color:#fff;
+    font-size:24px;
+    font-family:'Bangers', cursive;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 4px 0 #2a0a5a;
+    user-select:none;
+    -webkit-user-select:none;
+    touch-action:none;
+  }
+  .mobile-btn:active {
+    transform:translateY(3px);
+    box-shadow:0 1px 0 #2a0a5a;
+  }
+  
+  @media (max-width:700px) {
+    .answer-question { font-size:30px; padding:12px 20px; }
+    .answer-btn { font-size:20px; padding:12px 6px; min-height:56px; }
+    .super-meter { bottom:20px; right:20px; padding:6px 14px 6px 8px; }
+    .super-meter-bg { width:100px; }
+    .instructions { display:none; }
+    .player-hud-avatar { width:36px; height:36px; font-size:20px; }
+    .brawler-grid { grid-template-columns:repeat(3, 1fr); }
+    .brawler-card-avatar { width:48px; height:48px; font-size:28px; }
+    .brawler-card-name { font-size:14px; }
+    .tap-button { padding:18px 60px; }
+    .lives-hud { padding:6px 10px; }
+    .life-heart { font-size:20px; }
+    .compass { width:60px; height:60px; top:145px; right:10px; }
+    .minimap-container { width:100px; height:100px; top:145px; left:10px; }
+    .mobile-controls { display:flex; }
+    .mobile-btn { width:50px; height:50px; font-size:20px; }
+    .stage-hud { font-size:16px; padding:3px 16px; top:110px; }
+    .door-notification { font-size:16px; padding:8px 20px; top:150px; }
+    .timer-value { font-size:22px; min-width:60px; }
+    .timer-icon { font-size:16px; }
+    .back-game-btn { font-size:14px; padding:6px 16px; }
+    .hud { top:52px; }
+    .player-hud, .lives-hud { top:52px; }
+  }
+</style>
+
+<style>
+#bm-auth-gate{position:fixed;inset:0;z-index:999999;background:rgba(8,12,30,.94);display:flex;align-items:center;justify-content:center;padding:18px;font-family:Arial,sans-serif;color:#fff}
+#bm-auth-card{width:min(440px,100%);background:#151b35;border:2px solid #7c5cff;border-radius:20px;padding:24px;box-shadow:0 20px 70px #0009}
+#bm-auth-card h2{margin:0 0 8px;font-size:25px;text-align:center}#bm-auth-card p{color:#d5d9ee;text-align:center;font-size:14px;line-height:1.45}
+#bm-auth-card label{display:block;margin:12px 0 5px;font-size:13px;color:#e4e7ff}
+#bm-auth-card input{width:100%;box-sizing:border-box;padding:12px;border-radius:10px;border:1px solid #606b94;background:#0d1227;color:#fff;font-size:15px}
+#bm-auth-card button{width:100%;padding:12px;margin-top:12px;border:0;border-radius:10px;font-weight:700;cursor:pointer;background:#8b5cf6;color:white;font-size:15px}
+#bm-auth-card button.secondary{background:#303958}#bm-auth-status{min-height:20px;color:#ffd166;font-size:13px;text-align:center;margin-top:10px;white-space:pre-wrap}
+#bm-auth-user{position:fixed;z-index:99990;top:8px;left:8px;background:#151b35eF;color:#fff;border:1px solid #7c5cff;border-radius:10px;padding:7px 10px;font:12px Arial;display:none}
+</style>
+
+</head>
+<body>
+
+
+<div id="bm-auth-gate" role="dialog" aria-modal="true" aria-label="BRAWL MATH жүйесіне кіру">
+ <div id="bm-auth-card">
+  <h2>🎮 BRAWL MATH</h2>
+  <p>Ойынға кіру үшін аккаунтыңызды пайдаланыңыз. Жаңа оқушы болсаңыз, тіркелу батырмасын басыңыз.</p>
+  <form id="bm-auth-form">
+   <label for="bm-email">Электрондық пошта (логин)</label><input id="bm-email" type="email" autocomplete="username" required>
+   <label for="bm-password">Құпиясөз</label><input id="bm-password" type="password" autocomplete="current-password" minlength="6" required>
+   <div id="bm-profile-fields" style="display:none">
+    <label for="bm-name">Оқушының аты-жөні</label><input id="bm-name" type="text" autocomplete="name">
+    <label for="bm-class">Сыныбы (мысалы, 7А)</label><input id="bm-class" type="text">
+   </div>
+   <button id="bm-login" type="submit">Кіру</button>
+   <button id="bm-register" type="button" class="secondary">Жаңа оқушыны тіркеу</button>
+  </form>
+  <div id="bm-auth-status" aria-live="polite"></div>
+ </div>
+</div>
+<div id="bm-auth-user"></div>
+
+<div class="author-tag">Авторы: <span>Қадырханов Жігер</span></div>
+
+<div class="intro-screen" id="introScreen">
+  <div class="stars-bg"></div>
+  <div class="rays"></div>
+  <div class="burst"></div>
+  
+  <div class="flying-star" style="top:20%; left:10%; animation:flyStar1 3s ease-in-out infinite;">⭐</div>
+  <div class="flying-star" style="top:70%; right:15%; animation:flyStar2 4s ease-in-out infinite;">✨</div>
+  <div class="flying-star" style="bottom:15%; left:20%; animation:flyStar3 3.5s ease-in-out infinite;">🌟</div>
+  <div class="flying-star" style="top:30%; right:25%; animation:flyStar2 5s ease-in-out infinite;">💫</div>
+  
+  <div class="intro-logo">
+    <div class="logo-star">√</div>
+    <div class="intro-title-1">BRAWL</div>
+    <div class="intro-title-2">MATH · 2 КЕЗЕҢ</div>
+    <div class="intro-author">Авторы: Қадырханов Жігер</div>
+  </div>
+  
+  <button class="tap-button" id="tapButton">ТАП!</button>
+  
+  <div class="tap-hint">ОЙЫНДЫ БАСТАУ ҮШІН ТАП</div>
+</div>
+
+<div id="game">
+  <canvas id="canvas3d"></canvas>
+  
+  <div class="loading-3d" id="loading3d">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">3D ӘЛЕМ ЖҮКТЕЛУДЕ...</div>
+  </div>
+  
+  <!-- BACK BUTTON -->
+  <button class="back-game-btn" id="backGameBtn">← АРТҚА</button>
+  
+  <!-- TIMER -->
+  <div class="timer-hud" id="timerHud">
+    <span class="timer-icon">⏱️</span>
+    <span class="timer-value" id="timerValue">03:00</span>
+  </div>
+  
+  <div class="player-hud">
+    <div class="player-hud-avatar" id="playerHudAvatar">🔫</div>
+    <div class="player-hud-meta">
+      <div class="player-hud-name" id="playerHudName">SHELLY</div>
+      <div class="player-hud-trophies" id="playerHudTrophies">🏆 0</div>
+    </div>
+  </div>
+  
+  <div class="lives-hud">
+    <span class="lives-hud-label">ЖАН</span>
+    <span class="life-heart" id="life1">❤️</span>
+    <span class="life-heart" id="life2">❤️</span>
+    <span class="life-heart" id="life3">❤️</span>
+  </div>
+  
+  <div class="hud">
+    <div class="hud-card">
+      <span class="hud-star">⭐</span>
+      <span class="hud-score" id="scoreDisplay">0</span>
+    </div>
+    <div class="hud-card">
+      <span class="hud-label">ҚАЛҒАН</span>
+      <span class="hud-score" id="enemyCountDisplay">0</span>
+    </div>
+  </div>
+  
+  <div class="stage-hud" id="stageHud">1 КЕЗЕҢ</div>
+  
+  <div class="door-notification" id="doorNotification">🚪 ЕСІК ПАЙДА БОЛДЫ! ОҒАН КІРІҢІЗ!</div>
+  
+  <div class="minimap-container">
+    <canvas class="minimap-canvas" id="minimapCanvas" width="140" height="140"></canvas>
+  </div>
+  
+  <div class="compass">
+    <div class="compass-needle" id="compassNeedle"></div>
+  </div>
+  
+  <div class="combo-display" id="comboDisplay"></div>
+  
+  <div class="super-meter">
+    <div class="super-icon" id="superIcon">⚡</div>
+    <div class="super-meter-bg">
+      <div class="super-meter-fill" id="superFill"></div>
+    </div>
+  </div>
+  
+  <div class="mobile-controls" id="mobileControls">
+    <div class="mobile-row">
+      <button class="mobile-btn" data-key="w">↑</button>
+    </div>
+    <div class="mobile-row">
+      <button class="mobile-btn" data-key="a">←</button>
+      <button class="mobile-btn" data-key="s">↓</button>
+      <button class="mobile-btn" data-key="d">→</button>
+    </div>
+  </div>
+  
+  <div class="instructions">
+    <b>W A S D</b> — жүру<br>
+    <b>🖱️ Мышка</b> — бағытты өзгерту<br>
+    <b>🎯 Автоматты ату</b><br>
+    <b>⏱️ Уақыт</b> — 3 минут<br>
+    <b>⚠️ 3 қате</b> → жеңіліс<br>
+    <b>🚪 Есікке кіріңіз</b> → 2 кезең
+  </div>
+  
+  <div class="answer-overlay" id="answerOverlay">
+    <div class="answer-enemy-show">
+      <div class="answer-enemy-row">
+        <div class="answer-enemy-avatar" id="answerEnemyAvatar">👹</div>
+        <div class="answer-enemy-name" id="answerEnemyName">ENEMY</div>
+      </div>
+      <div class="answer-enemy-hits" id="answerEnemyHits">
+        <span class="answer-hit-star" id="answerHit1">⭐</span>
+        <span class="answer-hit-star" id="answerHit2">⭐</span>
+      </div>
+    </div>
+    <div class="task-type-badge" id="taskTypeBadge">ТАПСЫРМА</div>
+    <div class="answer-question" id="answerQuestion">2 + 2</div>
+    <div class="answer-hint" id="answerHint">Дұрыс жауапты таңдаңыз</div>
+    <div class="answer-grid" id="answerGrid"></div>
+  </div>
+  
+  <div class="feedback" id="feedback"></div>
+  
+  <div class="stage-transition-overlay" id="stageTransitionOverlay">
+    <div class="stage-transition-icon" id="stageTransitionIcon">🚪</div>
+    <div class="stage-transition-title" id="stageTransitionTitle">2 КЕЗЕҢ</div>
+    <div class="stage-transition-subtitle" id="stageTransitionSubtitle">Жаулар күшейтілді! Дайын болыңыз!</div>
+  </div>
+  
+  <div class="grade-select-overlay" id="gradeSelectOverlay">
+    <div class="grade-select-title">СЫНЫПТЫ ТАҢДА</div>
+    <div class="grade-select-subtitle">1-тоқсан · Математика · 2 кезең</div>
+    <div class="grade-grid" id="gradeGrid"></div>
+  </div>
+  
+  <div class="topic-select-overlay" id="topicSelectOverlay">
+    <div class="topic-select-title">ТАҚЫРЫПТЫ ТАҢДА</div>
+    <div class="topic-select-grade-badge" id="topicGradeBadge">5 СЫНЫП</div>
+    <div class="topic-list" id="topicList"></div>
+    <button class="back-btn" id="backToGradesBtn">← АРТҚА</button>
+  </div>
+  
+  <div class="select-overlay" id="selectOverlay">
+    <div class="select-title">ШАЙҚАСҚА ДАЙЫНДЫҚ</div>
+    <div class="select-subtitle" id="battleTopicName">Тақырып</div>
+    
+    <div class="topics-panel" id="battleTopicChips">
+      <div class="topic-chip" id="battleTopicChip">📐 Тақырып</div>
+    </div>
+    
+    <div class="map-info">🗺️ Карта: <span id="mapNameDisplay">ОРМАН</span> · 2 кезең</div>
+    
+    <div class="brawler-grid" id="brawlerGrid"></div>
+    <button class="start-battle-btn" id="startBattleBtn">ШАЙҚАСҚА!</button>
+    <button class="back-btn" id="backToTopicsBtn">← ТАҚЫРЫПТАР</button>
+  </div>
+  
+  <div class="gameover-overlay" id="gameoverOverlay">
+    <div class="gameover-stars" id="gameoverStars">⭐</div>
+    <div class="gameover-title" id="gameoverTitle">ЖЕҢІЛДІҢ!</div>
+    <div class="gameover-message" id="gameoverMessage">Барлық қарсыластарды жойдыңыз!</div>
+    <div class="gameover-score" id="gameoverScore">🏆 0</div>
+    <div class="gameover-buttons">
+      <button class="play-again-btn" id="playAgainBtn">ҚАЙТА ОЙНАУ</button>
+      <button class="back-menu-btn" id="backMenuBtn">ТАҚЫРЫПТАРҒА</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  @keyframes flyStar1 {
+    0%,100% { transform:translate(0, 0) rotate(0deg); }
+    50% { transform:translate(50px, -30px) rotate(180deg); }
+  }
+  @keyframes flyStar2 {
+    0%,100% { transform:translate(0, 0) rotate(0deg) scale(1); }
+    50% { transform:translate(-60px, 40px) rotate(-180deg) scale(1.3); }
+  }
+  @keyframes flyStar3 {
+    0%,100% { transform:translate(0, 0) rotate(0deg); opacity:0.7; }
+    50% { transform:translate(40px, -50px) rotate(180deg); opacity:1; }
+  }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  // ============ AUDIO ============
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  let audioCtx = null;
+  function initAudio() {
+    if (!audioCtx) { try { audioCtx = new AudioCtx(); } catch(e){} }
+    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  }
+  function beep(freq, duration, type='sine', volume=0.08, delay=0) {
+    if (!audioCtx) return;
+    const t = audioCtx.currentTime + delay;
+    const osc = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, t);
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(volume, t + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.001, t + duration);
+    osc.connect(g).connect(audioCtx.destination);
+    osc.start(t); osc.stop(t + duration + 0.02);
+  }
+  function soundShoot() { beep(600, 0.1, 'square', 0.05); beep(300, 0.15, 'square', 0.04, 0.02); }
+  function soundHit() { beep(120, 0.15, 'sawtooth', 0.1); }
+  function soundCorrect() { [523,659,784,1046].forEach((f,i)=>beep(f,0.15,'triangle',0.12,i*0.05)); }
+  function soundWrong() { beep(200,0.3,'sawtooth',0.12); beep(150,0.3,'sawtooth',0.12,0.05); }
+  function soundWin() { [523,659,784,1046,1318,1568].forEach((f,i)=>beep(f,0.5,'triangle',0.15,i*0.12)); }
+  function soundLose() { [392,330,262,196,147].forEach((f,i)=>beep(f,0.4,'sawtooth',0.12,i*0.18)); }
+  function soundSuper() { [392,523,659,880,1046,1318].forEach((f,i)=>beep(f,0.25,'sawtooth',0.1,i*0.04)); }
+  function soundIntro() {
+    [262,330,392,523,659,784].forEach((f,i)=>beep(f,0.3,'triangle',0.12,i*0.1));
+    setTimeout(() => {
+      [523,659,784,1046].forEach((f,i)=>beep(f,0.5,'triangle',0.15,i*0.08));
+    }, 700);
+  }
+  function soundTap() { [523,659,784,1046,1318].forEach((f,i)=>beep(f,0.2,'square',0.1,i*0.03)); }
+  function soundStageTransition() {
+    [261,329,392,523,659,784,1046].forEach((f,i)=>beep(f,0.4,'triangle',0.15,i*0.12));
+  }
+  function soundDoorOpen() {
+    [392,523,659,784].forEach((f,i)=>beep(f,0.3,'sine',0.12,i*0.08));
+  }
+  function soundTick() { beep(800, 0.05, 'square', 0.04); }
+  function soundTimeUp() {
+    [392,330,262,196,147,98].forEach((f,i)=>beep(f,0.5,'sawtooth',0.15,i*0.15));
+  }
+  
+  // ============ BRAWLER ДЕРЕКТЕРІ ============
+  const BRAWLERS = [
+    { id:'shelly', name:'SHELLY', emoji:'🔫', color1:'#ffb347', color2:'#e8871a', rarity:'common',
+      bullet:{ color:'#ffd966', glow:'#ff8c00', size:1.2, count:3, spread:0.15 } },
+    { id:'colt', name:'COLT', emoji:'🤠', color1:'#5a9bd4', color2:'#3d7ab0', rarity:'rare',
+      bullet:{ color:'#7ec8ff', glow:'#3d7ab0', size:1.0, count:6, spread:0.06 } },
+    { id:'bull', name:'BULL', emoji:'🐂', color1:'#c98a3a', color2:'#8a5a1a', rarity:'rare',
+      bullet:{ color:'#ffb347', glow:'#8a5a1a', size:1.4, count:5, spread:0.2 } },
+    { id:'jessie', name:'JESSIE', emoji:'🔧', color1:'#4da6ff', color2:'#1a5a9a', rarity:'superrare',
+      bullet:{ color:'#7ec8ff', glow:'#1a5a9a', size:1.1, count:4, spread:0.1 } },
+    { id:'piper', name:'PIPER', emoji:'🌸', color1:'#ff8ac8', color2:'#b3246a', rarity:'epic',
+      bullet:{ color:'#ffb3d9', glow:'#b3246a', size:1.3, count:3, spread:0.05 } },
+    { id:'spike', name:'SPIKE', emoji:'🌵', color1:'#7dcc5e', color2:'#3a8a2a', rarity:'legendary',
+      bullet:{ color:'#b9ff8a', glow:'#3a8a2a', size:1.1, count:5, spread:0.25 } },
+    { id:'crow', name:'CROW', emoji:'🐦‍⬛', color1:'#b95eff', color2:'#5a1a9a', rarity:'legendary',
+      bullet:{ color:'#e0aaff', glow:'#5a1a9a', size:1.0, count:3, spread:0.1 } },
+    { id:'leon', name:'LEON', emoji:'🦎', color1:'#5ec95e', color2:'#1a5a1a', rarity:'legendary',
+      bullet:{ color:'#b9ff8a', glow:'#1a5a1a', size:1.1, count:4, spread:0.12 } },
+  ];
+  
+  const ENEMY_BRAWLERS = [
+    { id:'e_elprimo', name:'EL PRIMO', emoji:'💪', color1:'#ff6b6b', color2:'#a02020', rarity:'rare',
+      bullet:{ color:'#ff6b6b', glow:'#a02020', size:1.3, count:3, spread:0.15 }, hp:100, speed:3.5 },
+    { id:'e_nita', name:'NITA', emoji:'🐻', color1:'#c98a3a', color2:'#6a3a0a', rarity:'rare',
+      bullet:{ color:'#ffb347', glow:'#6a3a0a', size:1.2, count:2, spread:0.1 }, hp:110, speed:3.0 },
+    { id:'e_8bit', name:'8-BIT', emoji:'🤖', color1:'#8a9aff', color2:'#3a4a9a', rarity:'superrare',
+      bullet:{ color:'#aabaff', glow:'#3a4a9a', size:1.4, count:3, spread:0.1 }, hp:130, speed:2.2 },
+    { id:'e_rico', name:'RICO', emoji:'🎱', color1:'#5ec95e', color2:'#1a6a1a', rarity:'superrare',
+      bullet:{ color:'#b9ff8a', glow:'#1a6a1a', size:1.1, count:4, spread:0.15 }, hp:100, speed:3.2 },
+    { id:'e_mortis', name:'MORTIS', emoji:'🧛', color1:'#b95eff', color2:'#3a1a5a', rarity:'mythic',
+      bullet:{ color:'#e0aaff', glow:'#3a1a5a', size:1.1, count:3, spread:0.2 }, hp:105, speed:5.0 },
+    { id:'e_surge', name:'SURGE', emoji:'⚡', color1:'#5ec9c9', color2:'#1a7a7a', rarity:'legendary',
+      bullet:{ color:'#aaffff', glow:'#1a7a7a', size:1.2, count:4, spread:0.12 }, hp:120, speed:3.4 },
+    { id:'e_amber', name:'AMBER', emoji:'🔥', color1:'#ff8a3a', color2:'#a03a0a', rarity:'legendary',
+      bullet:{ color:'#ffb37a', glow:'#a03a0a', size:1.0, count:5, spread:0.15 }, hp:105, speed:3.5 },
+    { id:'e_sandy', name:'SANDY', emoji:'😴', color1:'#c9c95e', color2:'#6a6a1a', rarity:'legendary',
+      bullet:{ color:'#ffff8a', glow:'#6a6a1a', size:1.2, count:4, spread:0.15 }, hp:110, speed:3.2 },
+    { id:'e_pam', name:'PAM', emoji:'🔩', color1:'#ffaa5e', color2:'#a05a1a', rarity:'epic',
+      bullet:{ color:'#ffd0a0', glow:'#a05a1a', size:1.2, count:6, spread:0.25 }, hp:120, speed:2.8 },
+    { id:'e_tara', name:'TARA', emoji:'🔮', color1:'#ff4d6d', color2:'#8a1a3a', rarity:'mythic',
+      bullet:{ color:'#ff8aa0', glow:'#8a1a3a', size:1.2, count:4, spread:0.15 }, hp:110, speed:3.2 },
+  ];
+  
+  const RARITY_COLORS = {
+    common:'#b5b5b5', rare:'#5ec95e', superrare:'#4da6ff',
+    epic:'#b95eff', mythic:'#ff4d6d', legendary:'#ffd966'
+  };
+  const RARITY_NAMES = {
+    common:'Common', rare:'Rare', superrare:'Super Rare',
+    epic:'Epic', mythic:'Mythic', legendary:'Legendary'
+  };
+  
+  // ============================================================
+  // ============ МАТЕМАТИКАЛЫҚ ЖАЗУ КӨМЕКШІЛЕРІ ============
+  // ============================================================
+  function frac(num, den) {
+    return `<span class="math-frac"><span class="num">${num}</span><span class="den">${den}</span></span>`;
+  }
+  function pow(base, exp) {
+    return `${base}<span class="math-power">${exp}</span>`;
+  }
+  function sqrt(radicand) {
+    return `<span class="math-sqrt"><span class="sqrt-symbol">√</span><span class="radicand">${radicand}</span></span>`;
+  }
+  function mixed(whole, num, den) {
+    return `<span class="math-mixed"><span class="whole">${whole}</span>${frac(num, den)}</span>`;
+  }
+  
+  // ============================================================
+  // ============ ТАПСЫРМА ГЕНЕРАТОРЛАРЫ ============
+  // ============================================================
+  function randInt(min, max) { return Math.floor(Math.random()*(max-min+1))+min; }
+  function shuffle(arr) {
+    for (let i = arr.length-1; i>0; i--) {
+      const j = Math.floor(Math.random()*(i+1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+  
+  // ============ ҚАЙТАЛАНБАЙТЫН ТАПСЫРМАЛАР ============
+  const usedTasks = {};
+  function taskKey(topicId, question) { return topicId + '::' + question; }
+  function isTaskUsed(topicId, question) { return usedTasks[taskKey(topicId, question)] === true; }
+  function markTaskUsed(topicId, question) { usedTasks[taskKey(topicId, question)] = true; }
+  function resetUsedTasks(topicId) {
+    Object.keys(usedTasks).forEach(k => {
+      if (k.startsWith(topicId + '::')) delete usedTasks[k];
+    });
+  }
+  function getUniqueTask(topicId, generatorFn, maxAttempts = 50) {
+    for (let i = 0; i < maxAttempts; i++) {
+      const task = generatorFn();
+      const key = task.question.replace(/<[^>]*>/g, '');
+      if (!isTaskUsed(topicId, key)) {
+        markTaskUsed(topicId, key);
+        return task;
+      }
+    }
+    resetUsedTasks(topicId);
+    const task = generatorFn();
+    markTaskUsed(topicId, task.question.replace(/<[^>]*>/g, ''));
+    return task;
+  }
+  
+  function genNumWrongs(correct, count) {
+    const c = parseInt(correct);
+    const wrongs = new Set();
+    let attempts = 0;
+    while (wrongs.size < count && attempts < 50) {
+      const delta = randInt(1, Math.max(3, Math.floor(Math.abs(c) * 0.3)));
+      const wrong = c + (Math.random() < 0.5 ? delta : -delta);
+      if (wrong !== c) wrongs.add(wrong.toString());
+      attempts++;
+    }
+    return Array.from(wrongs);
+  }
+  function gcd(x, y) { while(y) { [x, y] = [y, x % y]; } return x; }
+  function opt(text, value) {
+    return { text: text, value: value !== undefined ? value : text.replace(/<[^>]*>/g, '') };
+  }
+  
+  // ============================================================
+  // ============ 5 СЫНЫП ============
+  // ============================================================
+  function genDecimalAddSub5() {
+    const a = parseFloat((Math.random() * 50 + 1).toFixed(1));
+    const b = parseFloat((Math.random() * 30 + 1).toFixed(1));
+    const isAdd = Math.random() < 0.5;
+    let result, question;
+    if (isAdd) { result = a + b; question = `${a} + ${b}`; }
+    else { if (a < b) return genDecimalAddSub5(); result = a - b; question = `${a} − ${b}`; }
+    const correct = result.toFixed(1);
+    const wrongs = new Set();
+    wrongs.add((result + 0.1).toFixed(1));
+    wrongs.add((result - 0.1).toFixed(1));
+    wrongs.add((result + 1).toFixed(1));
+    wrongs.delete(correct);
+    return { question, correct, hint: isAdd ? 'Ондық бөлшектерді қосыңыз' : 'Ондық бөлшектерді азайтыңыз',
+      answers: shuffle([opt(correct), ...Array.from(wrongs).slice(0, 3).map(w => opt(w))]) };
+  }
+  function genDecimalMulDiv5() {
+    const isMul = Math.random() < 0.5;
+    if (isMul) {
+      const a = parseFloat((Math.random() * 10 + 1).toFixed(1));
+      const b = randInt(2, 9);
+      const result = a * b;
+      const correct = result.toFixed(1);
+      const wrongs = new Set();
+      wrongs.add((result + 0.1).toFixed(1));
+      wrongs.add((result - 0.1).toFixed(1));
+      wrongs.add((result + 1).toFixed(1));
+      wrongs.delete(correct);
+      return { question: `${a} × ${b}`, correct, hint: 'Ондық бөлшекті көбейтіңіз',
+        answers: shuffle([opt(correct), ...Array.from(wrongs).slice(0, 3).map(w => opt(w))]) };
+    } else {
+      const b = randInt(2, 9);
+      const result = parseFloat((Math.random() * 10 + 1).toFixed(1));
+      const a = result * b;
+      const correct = result.toFixed(1);
+      const wrongs = new Set();
+      wrongs.add((result + 0.1).toFixed(1));
+      wrongs.add((result - 0.1).toFixed(1));
+      wrongs.add((result + 1).toFixed(1));
+      wrongs.delete(correct);
+      return { question: `${a.toFixed(1)} ÷ ${b}`, correct, hint: 'Ондық бөлшекті бөліңіз',
+        answers: shuffle([opt(correct), ...Array.from(wrongs).slice(0, 3).map(w => opt(w))]) };
+    }
+  }
+  function genPercent5() {
+    const percents = [5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 80];
+    const p = percents[randInt(0, percents.length-1)];
+    const nums = [20, 40, 50, 60, 80, 100, 120, 150, 200, 250, 300, 400, 500];
+    const n = nums[randInt(0, nums.length-1)];
+    const result = (p * n) / 100;
+    const correct = Number.isInteger(result) ? result.toString() : result.toFixed(1);
+    const wrongs = new Set();
+    wrongs.add((result + 1).toString());
+    wrongs.add((result - 1).toString());
+    wrongs.add((result + 5).toString());
+    wrongs.add((result * 2).toString());
+    wrongs.delete(correct);
+    return { question: `${n} санының ${p}%`, correct, hint: 'Пайызды табыңыз',
+      answers: shuffle([opt(correct), ...Array.from(wrongs).slice(0, 3).map(w => opt(w))]) };
+  }
+  function genSimpleFractionAddSub5() {
+    const d1 = randInt(2, 10), d2 = randInt(2, 10);
+    const n1 = randInt(1, d1-1), n2 = randInt(1, d2-1);
+    const isAdd = Math.random() < 0.5;
+    const commonD = d1 * d2;
+    const num1 = n1 * d2, num2 = n2 * d1;
+    let resultNum, resultDen;
+    if (isAdd) { resultNum = num1 + num2; resultDen = commonD; }
+    else { resultNum = num1 - num2; resultDen = commonD; if (resultNum <= 0) return genSimpleFractionAddSub5(); }
+    const g = gcd(Math.abs(resultNum), resultDen);
+    resultNum /= g; resultDen /= g;
+    const correctStr = resultDen === 1 ? resultNum.toString() : `${resultNum}/${resultDen}`;
+    const question = isAdd ? `${frac(n1, d1)} + ${frac(n2, d2)}` : `${frac(n1, d1)} − ${frac(n2, d2)}`;
+    const correctText = resultDen === 1 ? resultNum.toString() : frac(resultNum, resultDen);
+    const wrongs = [];
+    if (resultDen !== 1) {
+      wrongs.push(opt(frac(resultNum+1, resultDen), `${resultNum+1}/${resultDen}`));
+      wrongs.push(opt(frac(resultNum, resultDen+1), `${resultNum}/${resultDen+1}`));
+      wrongs.push(opt(frac(resultNum+2, resultDen), `${resultNum+2}/${resultDen}`));
+    } else {
+      wrongs.push(opt((resultNum+1).toString()));
+      wrongs.push(opt((resultNum-1).toString()));
+      wrongs.push(opt((resultNum+2).toString()));
+    }
+    return { question, correct: correctStr, hint: isAdd ? 'Жай бөлшектерді қосыңыз' : 'Жай бөлшектерді азайтыңыз',
+      answers: shuffle([opt(correctText, correctStr), ...wrongs]) };
+  }
+  function genSimpleFractionMulDiv5() {
+    const isMul = Math.random() < 0.5;
+    const n1 = randInt(1, 9), d1 = randInt(2, 10);
+    const n2 = randInt(1, 9), d2 = randInt(2, 10);
+    let resultNum, resultDen, question;
+    if (isMul) { resultNum = n1 * n2; resultDen = d1 * d2; question = `${frac(n1, d1)} × ${frac(n2, d2)}`; }
+    else { resultNum = n1 * d2; resultDen = d1 * n2; question = `${frac(n1, d1)} ÷ ${frac(n2, d2)}`; }
+    const g = gcd(resultNum, resultDen);
+    resultNum /= g; resultDen /= g;
+    const correctStr = resultDen === 1 ? resultNum.toString() : `${resultNum}/${resultDen}`;
+    const correctText = resultDen === 1 ? resultNum.toString() : frac(resultNum, resultDen);
+    const wrongs = [];
+    if (resultDen !== 1) {
+      wrongs.push(opt(frac(resultNum+1, resultDen), `${resultNum+1}/${resultDen}`));
+      wrongs.push(opt(frac(resultNum, resultDen+1), `${resultNum}/${resultDen+1}`));
+      if (resultNum > 1) wrongs.push(opt(frac(resultDen, resultNum), `${resultDen}/${resultNum}`));
+      else wrongs.push(opt(frac(resultNum+2, resultDen), `${resultNum+2}/${resultDen}`));
+    } else {
+      wrongs.push(opt((resultNum+1).toString()));
+      wrongs.push(opt((resultNum-1).toString()));
+      wrongs.push(opt((resultNum+2).toString()));
+    }
+    return { question, correct: correctStr, hint: isMul ? 'Жай бөлшектерді көбейтіңіз' : 'Жай бөлшектерді бөліңіз',
+      answers: shuffle([opt(correctText, correctStr), ...wrongs]) };
+  }
+  
+  // ============================================================
+  // ============ 6 СЫНЫП ============
+  // ============================================================
+  function genProportion6() {
+    const a = randInt(2, 15), b = randInt(2, 15), c = randInt(2, 15);
+    const x = (b * c) / a;
+    if (!Number.isInteger(x) || x <= 0 || x > 100) return genProportion6();
+    const correct = x.toString();
+    return { question: `${a} : ${b} = ${c} : x`, correct, hint: 'Пропорцияны шешіңіз: a·x = b·c',
+      answers: shuffle([opt(correct), ...genNumWrongs(correct, 3).map(w => opt(w))]) };
+  }
+  function genLikeTerms6() {
+    const a = randInt(2, 12), b = randInt(2, 12), c = randInt(1, 10);
+    const variant = randInt(0, 2);
+    let correct, question;
+    if (variant === 0) { correct = `${a + b}x`; question = `${a}x + ${b}x`; }
+    else if (variant === 1) { correct = `${a - b}x`; question = `${a}x − ${b}x`; }
+    else { correct = `${a + b}x + ${c}`; question = `${a}x + ${c} + ${b}x`; }
+    return { question, correct, hint: 'Ұқсас қосылғыштарды біріктіріңіз',
+      answers: shuffle([opt(correct), opt(`${a+b+1}x`), opt(`${a+b-1}x`), opt(`${a*b}x`)]) };
+  }
+  function genCompareRational6() {
+    const a = randInt(-20, 20);
+    let b = randInt(-20, 20);
+    if (a === b) b = a + 1;
+    const correct = a > b ? '>' : (a < b ? '<' : '=');
+    const question = `${a} &nbsp;?&nbsp; ${b}`;
+    const allOpts = ['>', '<', '='];
+    const wrongs = allOpts.filter(o => o !== correct).slice(0, 3);
+    while (wrongs.length < 3) wrongs.push(allOpts[wrongs.length % 3]);
+    return { question, correct, hint: 'Рационал сандарды салыстырыңыз',
+      answers: shuffle([opt(correct), ...wrongs.slice(0, 3).map(w => opt(w))]) };
+  }
+  function genSignedAddSub6() {
+    const a = randInt(-30, 30), b = randInt(-30, 30);
+    const isAdd = Math.random() < 0.5;
+    const result = isAdd ? a + b : a - b;
+    const correct = result.toString();
+    const question = isAdd ? `${a} + (${b})` : `${a} − (${b})`;
+    return { question, correct, hint: isAdd ? 'Таңбалары әртүрлі сандарды қосыңыз' : 'Таңбалары әртүрлі сандарды азайтыңыз',
+      answers: shuffle([opt(correct), ...genNumWrongs(correct, 3).map(w => opt(w))]) };
+  }
+  function genSignedMulDiv6() {
+    const a = randInt(-15, 15), b = randInt(-15, 15);
+    if (a === 0 || b === 0) return genSignedMulDiv6();
+    const isMul = Math.random() < 0.5;
+    let result, question;
+    if (isMul) { result = a * b; question = `${a} × (${b})`; }
+    else { if (a % b !== 0) return genSignedMulDiv6(); result = a / b; question = `${a} ÷ (${b})`; }
+    const correct = result.toString();
+    return { question, correct, hint: isMul ? 'Таңбалары әртүрлі сандарды көбейтіңіз' : 'Таңбалары әртүрлі сандарды бөліңіз',
+      answers: shuffle([opt(correct), ...genNumWrongs(correct, 3).map(w => opt(w))]) };
+  }
+  
+  // ============================================================
+  // ============ 7 СЫНЫП ============
+  // ============================================================
+  function genMonomialDegree7() {
+    const coef = randInt(2, 9), xPow = randInt(1, 5), yPow = randInt(0, 4);
+    let monomialHTML, degree;
+    if (yPow === 0) { monomialHTML = `${coef}${pow('x', xPow)}`; degree = xPow; }
+    else { monomialHTML = `${coef}${pow('x', xPow)}${pow('y', yPow)}`; degree = xPow + yPow; }
+    const correct = degree.toString();
+    const wrongs = [(degree + 1).toString(), (degree - 1).toString(), (degree + 2).toString()].filter(w => parseInt(w) > 0);
+    while (wrongs.length < 3) wrongs.push((degree + wrongs.length + 1).toString());
+    return { question: `${monomialHTML} бірмүшесінің дәрежесі`, correct, hint: 'Барлық айнымалылар дәрежелерінің қосындысы',
+      answers: shuffle([opt(correct), ...wrongs.slice(0, 3).map(w => opt(w))]) };
+  }
+  function genPolynomialAddSub7() {
+    const a = randInt(2, 9), b = randInt(2, 9), c = randInt(2, 9), d = randInt(2, 9);
+    const isAdd = Math.random() < 0.5;
+    let correct, question, correctText;
+    if (isAdd) {
+      const coefX = a + c, constTerm = b + d;
+      correct = `${coefX}x+${constTerm}`; correctText = `${coefX}x + ${constTerm}`;
+      question = `(${a}x + ${b}) + (${c}x + ${d})`;
+    } else {
+      const coefX = a - c, constTerm = b - d;
+      correct = `${coefX}x+${constTerm}`;
+      correctText = constTerm >= 0 ? `${coefX}x + ${constTerm}` : `${coefX}x − ${Math.abs(constTerm)}`;
+      question = `(${a}x + ${b}) − (${c}x + ${d})`;
+    }
+    return { question, correct, hint: 'Ұқсас мүшелерді біріктіріңіз',
+      answers: shuffle([opt(correctText, correct), opt(`${a+c}x + ${b+d+1}`), opt(`${a+c+1}x + ${b+d}`), opt(`${a*c}x + ${b*d}`)]) };
+  }
+  function genPolynomialMul7() {
+    const a = randInt(2, 9), b = randInt(2, 9), c = randInt(2, 9);
+    const variant = randInt(0, 2);
+    let correct, question, correctText;
+    if (variant === 0) { correct = `${a*b}x2`; correctText = `${a*b}${pow('x', 2)}`; question = `${a}x × ${b}x`; }
+    else if (variant === 1) { correct = `${a*c}x2+${b*c}x`; correctText = `${a*c}${pow('x', 2)} + ${b*c}x`; question = `(${a}x + ${b}) × ${c}x`; }
+    else { correct = `${a*b}x`; correctText = `${a*b}x`; question = `${a} × ${b}x`; }
+    return { question, correct, hint: 'Көпмүшелерді көбейтіңіз',
+      answers: shuffle([opt(correctText, correct), opt(`${a*b+1}${pow('x', 2)}`), opt(`${a+b}${pow('x', 2)}`), opt(`${a*b}x`)]) };
+  }
+  function genCommonFactor7() {
+    const a = randInt(2, 12), b = randInt(2, 12);
+    const common = gcd(a, b);
+    if (common === 1) return genCommonFactor7();
+    const correct = `${common}(${a/common}x+${b/common})`;
+    const correctText = `${common}(${a/common}x + ${b/common})`;
+    return { question: `${a}x + ${b}`, correct, hint: 'Ортақ көбейткішті жақшаның сыртына шығарыңыз',
+      answers: shuffle([opt(correctText, correct), opt(`${common}(${a}x + ${b})`), opt(`${common+1}(${a/common}x + ${b/common})`), opt(`${common}(${a/common}x + ${b})`)]) };
+  }
+  function genPowerProperties7() {
+    const base = randInt(2, 9), p1 = randInt(1, 5), p2 = randInt(1, 5);
+    const variant = randInt(0, 2);
+    let correct, question, correctText;
+    if (variant === 0) { correct = `${base}^${p1+p2}`; correctText = pow(base, p1+p2); question = `${pow(base, p1)} × ${pow(base, p2)}`; }
+    else if (variant === 1) { if (p1 < p2) return genPowerProperties7(); correct = `${base}^${p1-p2}`; correctText = pow(base, p1-p2); question = `${pow(base, p1)} ÷ ${pow(base, p2)}`; }
+    else { correct = `${base}^${p1*p2}`; correctText = pow(base, p1*p2); question = `(${pow(base, p1)})<span class="math-power">${p2}</span>`; }
+    return { question, correct, hint: 'Дәреженің қасиеттерін қолданыңыз',
+      answers: shuffle([opt(correctText, correct), opt(pow(base, p1+p2+1), `${base}^${p1+p2+1}`), opt(pow(base, p1*p2), `${base}^${p1*p2}`), opt(pow(base, Math.abs(p1-p2) || 1), `${base}^${Math.abs(p1-p2) || 1}`)]) };
+  }
+  
+  // ============================================================
+  // ============ 8 СЫНЫП ============
+  // ============================================================
+  function extractFromSqrt(n) {
+    let k = 1, m = n;
+    for (let i = 2; i * i <= m; i++) {
+      const sq = i * i;
+      while (m % sq === 0) { k *= i; m /= sq; }
+    }
+    return { k, m };
+  }
+  function isPerfectSquare(n) { const s = Math.sqrt(n); return s === Math.floor(s); }
+  
+  function genSquareRoot8() {
+    const numbers = [];
+    for (let i = 2; i <= 150; i++) {
+      if (!isPerfectSquare(i)) {
+        const {k, m} = extractFromSqrt(i);
+        if (k > 1 && m > 1 && m < 50) numbers.push(i);
+      }
+    }
+    const n = numbers[randInt(0, numbers.length-1)];
+    const { k, m } = extractFromSqrt(n);
+    let correct, correctText;
+    if (m === 1) { correct = k.toString(); correctText = k.toString(); }
+    else if (k === 1) { correct = `√${m}`; correctText = sqrt(m); }
+    else { correct = `${k}√${m}`; correctText = `${k}${sqrt(m)}`; }
+    const wrongs = [];
+    if (k > 1) {
+      wrongs.push(opt(`${k+1}${sqrt(m)}`, `${k+1}√${m}`));
+      wrongs.push(opt(`${k-1 > 0 ? k-1 : k+2}${sqrt(m)}`, `${k-1 > 0 ? k-1 : k+2}√${m}`));
+      wrongs.push(opt(sqrt(n), `√${n}`));
+    } else {
+      wrongs.push(opt(sqrt(m+1), `√${m+1}`));
+      wrongs.push(opt(sqrt(m*2), `√${m*2}`));
+      wrongs.push(opt(sqrt(m+3), `√${m+3}`));
+    }
+    return { question: sqrt(n), correct, hint: 'Түбір астынан толық квадратты шығарыңыз',
+      answers: shuffle([opt(correctText, correct), ...wrongs.slice(0, 3)]) };
+  }
+  function genSimplifySqrtExpr8() {
+    const a = randInt(1, 5);
+    const n1 = [8, 12, 18, 20, 27, 32, 45, 48, 50, 75][randInt(0, 9)];
+    const n2 = [8, 12, 18, 20, 27, 32, 45, 48, 50, 75][randInt(0, 9)];
+    const {k:k1, m:m1} = extractFromSqrt(n1);
+    const {k:k2, m:m2} = extractFromSqrt(n2);
+    if (m1 !== m2) return genSimplifySqrtExpr8();
+    const coef = a * k1 + k2;
+    const correct = `${coef}√${m1}`;
+    const correctText = `${coef}${sqrt(m1)}`;
+    return { question: `${a}${sqrt(n1)} + ${sqrt(n2)}`, correct, hint: 'Ұқсас түбірлерді біріктіріңіз',
+      answers: shuffle([opt(correctText, correct), opt(`${coef+1}${sqrt(m1)}`, `${coef+1}√${m1}`), opt(`${coef-1 > 0 ? coef-1 : coef+2}${sqrt(m1)}`, `${coef-1 > 0 ? coef-1 : coef+2}√${m1}`), opt(`${coef}${sqrt(m1+1)}`, `${coef}√${m1+1}`)]) };
+  }
+  function genSqrtMulDiv8() {
+    const isMul = Math.random() < 0.5;
+    if (isMul) {
+      const a = randInt(2, 12), b = randInt(2, 12);
+      const product = a * b;
+      const {k, m} = extractFromSqrt(product);
+      let correct, correctText;
+      if (m === 1) { correct = k.toString(); correctText = k.toString(); }
+      else if (k === 1) { correct = `√${m}`; correctText = sqrt(m); }
+      else { correct = `${k}√${m}`; correctText = `${k}${sqrt(m)}`; }
+      return { question: `${sqrt(a)} × ${sqrt(b)}`, correct, hint: 'Түбірлерді көбейтіңіз',
+        answers: shuffle([opt(correctText, correct), opt(sqrt(product), `√${product}`), opt(`${k+1}${sqrt(m)}`, `${k+1}√${m}`), opt(`${k}${sqrt(m+1)}`, `${k}√${m+1}`)]) };
+    } else {
+      const b = randInt(2, 9), result = randInt(2, 9);
+      const a = b * result * result;
+      if (a > 200) return genSqrtMulDiv8();
+      return { question: `${sqrt(a)} ÷ ${sqrt(b)}`, correct: result.toString(), hint: 'Түбірлерді бөліңіз',
+        answers: shuffle([opt(result.toString()), ...genNumWrongs(result.toString(), 3).map(w => opt(w))]) };
+    }
+  }
+  function genFactorIntoRoot8() {
+    const k = randInt(2, 6), m = randInt(2, 12);
+    const correct = `√${k*k*m}`;
+    const correctText = sqrt(k*k*m);
+    return { question: `${k}${sqrt(m)}`, correct, hint: 'k√m = √(k²·m)',
+      answers: shuffle([opt(correctText, correct), opt(sqrt(k*m), `√${k*m}`), opt(sqrt(k+k*m), `√${k+k*m}`), opt(sqrt(k*k+m), `√${k*k+m}`)]) };
+  }
+  function genFactorOutOfRoot8() {
+    const numbers = [];
+    for (let i = 2; i <= 150; i++) {
+      if (!isPerfectSquare(i)) {
+        const {k, m} = extractFromSqrt(i);
+        if (k > 1 && m > 1 && m < 30) numbers.push(i);
+      }
+    }
+    const n = numbers[randInt(0, numbers.length-1)];
+    const { k, m } = extractFromSqrt(n);
+    const correct = `${k}√${m}`;
+    const correctText = `${k}${sqrt(m)}`;
+    return { question: sqrt(n), correct, hint: 'Көбейткішті түбір таңбасынан шығарыңыз',
+      answers: shuffle([opt(correctText, correct), opt(`${k+1}${sqrt(m)}`, `${k+1}√${m}`), opt(`${k}${sqrt(m+1)}`, `${k}√${m+1}`), opt(`${k-1 > 0 ? k-1 : k+2}${sqrt(m)}`, `${k-1 > 0 ? k-1 : k+2}√${m}`)]) };
+  }
+  
+  // ============================================================
+  // ============ ОҚУ БАҒДАРЛАМАСЫ ============
+  // ============================================================
+  const CURRICULUM = {
+    5: { name: '5 СЫНЫП', emoji: '5️⃣', topics: [
+      { id: 'dec_add_sub_5', name: 'Ондық бөлшектерді қосу және азайту', icon: '🔟', desc: 'Ондық бөлшектермен амалдар', generate: genDecimalAddSub5 },
+      { id: 'dec_mul_div_5', name: 'Ондық бөлшектерді көбейту және бөлу', icon: '✖️', desc: 'Ондық бөлшектерді көбейту, бөлу', generate: genDecimalMulDiv5 },
+      { id: 'percent_5', name: 'Санның пайызын табу', icon: '％', desc: 'Пайызды есептеу', generate: genPercent5 },
+      { id: 'frac_add_sub_5', name: 'Жай бөлшектерді қосу және азайту', icon: '🍕', desc: 'Жай бөлшектермен амалдар', generate: genSimpleFractionAddSub5 },
+      { id: 'frac_mul_div_5', name: 'Жай бөлшектерді көбейту және бөлу', icon: '➗', desc: 'Жай бөлшектерді көбейту, бөлу', generate: genSimpleFractionMulDiv5 },
+    ]},
+    6: { name: '6 СЫНЫП', emoji: '6️⃣', topics: [
+      { id: 'proportion_6', name: 'Пропорция', icon: '⚖️', desc: 'Пропорцияларды шешу', generate: genProportion6 },
+      { id: 'like_terms_6', name: 'Ұқсас қосылғыштарды біріктіру', icon: '🔗', desc: 'Ұқсас мүшелерді біріктіру', generate: genLikeTerms6 },
+      { id: 'compare_rational_6', name: 'Рационал сандарды салыстыру', icon: '🔍', desc: 'Сандарды салыстыру', generate: genCompareRational6 },
+      { id: 'signed_add_sub_6', name: 'Таңбалары әртүрлі сандарды қосу және азайту', icon: '➕', desc: 'Таңбалары әртүрлі сандармен амалдар', generate: genSignedAddSub6 },
+      { id: 'signed_mul_div_6', name: 'Таңбалары әртүрлі сандарды көбейту және бөлу', icon: '✖️', desc: 'Таңбалары әртүрлі сандарды көбейту, бөлу', generate: genSignedMulDiv6 },
+    ]},
+    7: { name: '7 СЫНЫП', emoji: '7️⃣', topics: [
+      { id: 'monomial_degree_7', name: 'Бірмүшенің дәрежесін анықтау', icon: '📐', desc: 'Бірмүше дәрежесін табу', generate: genMonomialDegree7 },
+      { id: 'poly_add_sub_7', name: 'Көпмүшелерді қосу және азайту', icon: '🧮', desc: 'Көпмүшелермен амалдар', generate: genPolynomialAddSub7 },
+      { id: 'poly_mul_7', name: 'Көпмүшелерді көбейту', icon: '✖️', desc: 'Көпмүшелерді көбейту', generate: genPolynomialMul7 },
+      { id: 'common_factor_7', name: 'Ортақ көбейткішті жақшаның сыртына шығару', icon: '📤', desc: 'Ортақ көбейткішті шығару', generate: genCommonFactor7 },
+      { id: 'power_props_7', name: 'Дәреженің қасиеттері', icon: '🔋', desc: 'Дәрежелермен амалдар', generate: genPowerProperties7 },
+    ]},
+    8: { name: '8 СЫНЫП', emoji: '8️⃣', topics: [
+      { id: 'sqrt_8', name: 'Квадрат түбір', icon: '√', desc: 'Түбір астынан шығару', generate: genSquareRoot8 },
+      { id: 'simplify_sqrt_8', name: 'Квадрат түбірлері бар өрнектерді ықшамдау', icon: '📝', desc: 'Өрнектерді ықшамдау', generate: genSimplifySqrtExpr8 },
+      { id: 'sqrt_mul_div_8', name: 'Квадрат түбірлерді көбейту және бөлу', icon: '✖️', desc: 'Түбірлерді көбейту, бөлу', generate: genSqrtMulDiv8 },
+      { id: 'factor_into_root_8', name: 'Көбейткішті түбір таңбасының астына енгізу', icon: '📥', desc: 'Көбейткішті түбір астына енгізу', generate: genFactorIntoRoot8 },
+      { id: 'factor_out_root_8', name: 'Көбейткішті түбір таңбасынан шығару', icon: '📤', desc: 'Көбейткішті түбірден шығару', generate: genFactorOutOfRoot8 },
+    ]}
+  };
+  
+  // ============================================================
+  // ============ КАРТАЛАР ============
+  // ============================================================
+  const MAPS = [
+    { name: 'ОРМАН', skyTop: 0x4a2a8a, skyBottom: 0xb95eff, groundColor: 0x4a8a3a,
+      walls: [
+        { x: -60, z: -60, w: 40, d: 2, h: 4 }, { x: 0, z: -60, w: 40, d: 2, h: 4 },
+        { x: -60, z: 60, w: 40, d: 2, h: 4 }, { x: 0, z: 60, w: 40, d: 2, h: 4 },
+        { x: -60, z: -30, w: 2, d: 30, h: 4 }, { x: -60, z: 30, w: 2, d: 30, h: 4 },
+        { x: 60, z: -30, w: 2, d: 30, h: 4 }, { x: 60, z: 30, w: 2, d: 30, h: 4 },
+        { x: -30, z: -30, w: 15, d: 2, h: 3 }, { x: 15, z: -25, w: 2, d: 15, h: 3 },
+        { x: -20, z: 15, w: 20, d: 2, h: 3 }, { x: 25, z: 25, w: 15, d: 2, h: 3 },
+        { x: -8, z: 25, w: 2, d: 12, h: 3 }, { x: 8, z: 5, w: 2, d: 10, h: 3 },
+      ] },
+    { name: 'ШӨЛ', skyTop: 0x8a4a2a, skyBottom: 0xffb347, groundColor: 0xc9a55e,
+      walls: [
+        { x: -60, z: -60, w: 40, d: 2, h: 4 }, { x: 0, z: -60, w: 40, d: 2, h: 4 },
+        { x: -60, z: 60, w: 40, d: 2, h: 4 }, { x: 0, z: 60, w: 40, d: 2, h: 4 },
+        { x: -60, z: -30, w: 2, d: 30, h: 4 }, { x: -60, z: 30, w: 2, d: 30, h: 4 },
+        { x: 60, z: -30, w: 2, d: 30, h: 4 }, { x: 60, z: 30, w: 2, d: 30, h: 4 },
+        { x: -25, z: -30, w: 12, d: 2, h: 3 }, { x: 25, z: 30, w: 12, d: 2, h: 3 },
+        { x: -30, z: 25, w: 15, d: 2, h: 3 }, { x: 30, z: -25, w: 15, d: 2, h: 3 },
+      ] },
+    { name: 'МҰЗ', skyTop: 0x1a3a6a, skyBottom: 0xaaddff, groundColor: 0x8accdd,
+      walls: [
+        { x: -60, z: -60, w: 40, d: 2, h: 4 }, { x: 0, z: -60, w: 40, d: 2, h: 4 },
+        { x: -60, z: 60, w: 40, d: 2, h: 4 }, { x: 0, z: 60, w: 40, d: 2, h: 4 },
+        { x: -60, z: -30, w: 2, d: 30, h: 4 }, { x: -60, z: 30, w: 2, d: 30, h: 4 },
+        { x: 60, z: -30, w: 2, d: 30, h: 4 }, { x: 60, z: 30, w: 2, d: 30, h: 4 },
+        { x: -10, z: 0, w: 2, d: 15, h: 3 }, { x: 10, z: 0, w: 2, d: 15, h: 3 },
+        { x: 0, z: -10, w: 15, d: 2, h: 3 }, { x: 0, z: 10, w: 15, d: 2, h: 3 },
+      ] },
+    { name: 'ЖАНАРТАУ', skyTop: 0x2a0a0a, skyBottom: 0xff3a3a, groundColor: 0x4a2a2a,
+      walls: [
+        { x: -60, z: -60, w: 40, d: 2, h: 4 }, { x: 0, z: -60, w: 40, d: 2, h: 4 },
+        { x: -60, z: 60, w: 40, d: 2, h: 4 }, { x: 0, z: 60, w: 40, d: 2, h: 4 },
+        { x: -60, z: -30, w: 2, d: 30, h: 4 }, { x: -60, z: 30, w: 2, d: 30, h: 4 },
+        { x: 60, z: -30, w: 2, d: 30, h: 4 }, { x: 60, z: 30, w: 2, d: 30, h: 4 },
+        { x: -20, z: 0, w: 10, d: 2, h: 3 }, { x: 20, z: 0, w: 10, d: 2, h: 3 },
+        { x: 0, z: -20, w: 2, d: 10, h: 3 }, { x: 0, z: 20, w: 2, d: 10, h: 3 },
+      ] },
+    { name: 'ҒАРЫШ', skyTop: 0x0a0a2a, skyBottom: 0x2a2a5a, groundColor: 0x4a4a6a,
+      walls: [
+        { x: -60, z: -60, w: 40, d: 2, h: 4 }, { x: 0, z: -60, w: 40, d: 2, h: 4 },
+        { x: -60, z: 60, w: 40, d: 2, h: 4 }, { x: 0, z: 60, w: 40, d: 2, h: 4 },
+        { x: -60, z: -30, w: 2, d: 30, h: 4 }, { x: -60, z: 30, w: 2, d: 30, h: 4 },
+        { x: 60, z: -30, w: 2, d: 30, h: 4 }, { x: 60, z: 30, w: 2, d: 30, h: 4 },
+        { x: -15, z: 0, w: 2, d: 15, h: 3 }, { x: 15, z: 0, w: 2, d: 15, h: 3 },
+        { x: 0, z: -15, w: 15, d: 2, h: 3 }, { x: 0, z: 15, w: 15, d: 2, h: 3 },
+      ] }
+  ];
+  
+  function dist(x1,y1,x2,y2) { const dx=x2-x1, dy=y2-y1; return Math.sqrt(dx*dx+dy*dy); }
+  
+  // ============ 3D ============
+  const canvas = document.getElementById('canvas3d');
+  const minimapCanvas = document.getElementById('minimapCanvas');
+  const mmCtx = minimapCanvas.getContext('2d');
+  let scene, camera, renderer, clock;
+  let player3D, aimLine3D;
+  let enemyMeshes = [];
+  let environmentGroup;
+  let currentMap = null;
+  let currentWalls = [];
+  
+  let doorGroup = null;
+  let doorOpen = false;
+  let doorPosition = { x: 0, z: 0 };
+  const DOOR_RADIUS = 3;
+  
+  const WORLD_SIZE = 70;
+  const PLAYER_SPEED_3D = 18;
+  const ENEMY_COUNT = 6;
+  const HITS_TO_KILL = 2;
+  const MAX_WRONG = 3;
+  const ENEMY_QUESTION_RANGE = 8;
+  const ENEMY_DETECT_RANGE = 20;
+  
+  // ============ TIMER SETTINGS ============
+  const STAGE_TIME = 180; // 3 минут (секунд)
+  let timeRemaining = STAGE_TIME;
+  let lastTickSecond = -1;
+  
+  let currentStage = 1;
+  let enemiesPerStage = 6;
+  let enemyHpMultiplier = 1.0;
+  let enemySpeedMultiplier = 1.0;
+  
+  const state = {
+    score: 0, superMeter: 0, combo: 0, gameActive: false,
+    playerX: 0, playerZ: 0,
+    aimAngle: 0, facingAngle: 0,
+    enemies: [], bullets: [],
+    keys: {},
+    pendingEnemy: null, answerActive: false,
+    selectedBrawler: BRAWLERS[0],
+    wrongAnswers: 0,
+    cameraYaw: Math.PI * 0.25,
+    cameraPitch: 0.55,
+    cameraDistance: 22,
+    mapIndex: 0,
+    selectedGrade: null,
+    selectedTopic: null,
+    stage: 1,
+    doorSpawned: false,
+    paused: false
+  };
+  
+  const gameEl = document.getElementById('game');
+  const scoreDisplay = document.getElementById('scoreDisplay');
+  const enemyCountDisplay = document.getElementById('enemyCountDisplay');
+  const stageHud = document.getElementById('stageHud');
+  const doorNotification = document.getElementById('doorNotification');
+  const stageTransitionOverlay = document.getElementById('stageTransitionOverlay');
+  const stageTransitionIcon = document.getElementById('stageTransitionIcon');
+  const stageTransitionTitle = document.getElementById('stageTransitionTitle');
+  const stageTransitionSubtitle = document.getElementById('stageTransitionSubtitle');
+  const timerHud = document.getElementById('timerHud');
+  const timerValue = document.getElementById('timerValue');
+  const backGameBtn = document.getElementById('backGameBtn');
+  const superFill = document.getElementById('superFill');
+  const superIcon = document.getElementById('superIcon');
+  const answerOverlay = document.getElementById('answerOverlay');
+  const answerQuestion = document.getElementById('answerQuestion');
+  const answerHint = document.getElementById('answerHint');
+  const answerGrid = document.getElementById('answerGrid');
+  const answerEnemyAvatar = document.getElementById('answerEnemyAvatar');
+  const answerEnemyName = document.getElementById('answerEnemyName');
+  const answerHit1 = document.getElementById('answerHit1');
+  const answerHit2 = document.getElementById('answerHit2');
+  const taskTypeBadge = document.getElementById('taskTypeBadge');
+  const feedback = document.getElementById('feedback');
+  const comboDisplay = document.getElementById('comboDisplay');
+  const gameoverOverlay = document.getElementById('gameoverOverlay');
+  const gameoverTitle = document.getElementById('gameoverTitle');
+  const gameoverStars = document.getElementById('gameoverStars');
+  const gameoverMessage = document.getElementById('gameoverMessage');
+  const gameoverScore = document.getElementById('gameoverScore');
+  const playAgainBtn = document.getElementById('playAgainBtn');
+  const backMenuBtn = document.getElementById('backMenuBtn');
+  const selectOverlay = document.getElementById('selectOverlay');
+  const brawlerGrid = document.getElementById('brawlerGrid');
+  const startBattleBtn = document.getElementById('startBattleBtn');
+  const mapNameDisplay = document.getElementById('mapNameDisplay');
+  const playerHudAvatar = document.getElementById('playerHudAvatar');
+  const playerHudName = document.getElementById('playerHudName');
+  const playerHudTrophies = document.getElementById('playerHudTrophies');
+  const introScreen = document.getElementById('introScreen');
+  const tapButton = document.getElementById('tapButton');
+  const life1 = document.getElementById('life1');
+  const life2 = document.getElementById('life2');
+  const life3 = document.getElementById('life3');
+  const loading3d = document.getElementById('loading3d');
+  const compassNeedle = document.getElementById('compassNeedle');
+  const mobileControls = document.getElementById('mobileControls');
+  const gradeSelectOverlay = document.getElementById('gradeSelectOverlay');
+  const gradeGrid = document.getElementById('gradeGrid');
+  const topicSelectOverlay = document.getElementById('topicSelectOverlay');
+  const topicGradeBadge = document.getElementById('topicGradeBadge');
+  const topicList = document.getElementById('topicList');
+  const backToGradesBtn = document.getElementById('backToGradesBtn');
+  const backToTopicsBtn = document.getElementById('backToTopicsBtn');
+  const battleTopicName = document.getElementById('battleTopicName');
+  const battleTopicChips = document.getElementById('battleTopicChips');
+  const battleTopicChip = document.getElementById('battleTopicChip');
+  
+  // ============ 3D INIT ============
+  function init3D() {
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x87CEEB);
+    scene.fog = new THREE.Fog(0x87CEEB, 50, 150);
+    camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 500);
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    clock = new THREE.Clock();
+    
+    scene.add(new THREE.AmbientLight(0xffffff, 0.65));
+    const sun = new THREE.DirectionalLight(0xffffff, 1.0);
+    sun.position.set(40, 60, 30);
+    sun.castShadow = true;
+    sun.shadow.mapSize.width = 2048;
+    sun.shadow.mapSize.height = 2048;
+    sun.shadow.camera.left = -80; sun.shadow.camera.right = 80;
+    sun.shadow.camera.top = 80; sun.shadow.camera.bottom = -80;
+    sun.shadow.camera.far = 200;
+    scene.add(sun);
+    scene.add(new THREE.HemisphereLight(0x87CEEB, 0x3a5a2a, 0.5));
+  }
+  
+  function build3DWorld(map, isStage2) {
+    if (environmentGroup) scene.remove(environmentGroup);
+    environmentGroup = new THREE.Group();
+    scene.add(environmentGroup);
+    currentMap = map;
+    currentWalls = map.walls.map(w => ({...w}));
+    
+    const skyTop = isStage2 ? 0x1a0a3a : map.skyTop;
+    const skyBottom = isStage2 ? 0x7a2ecf : map.skyBottom;
+    const groundColor = isStage2 ? 0x3a2a5a : map.groundColor;
+    
+    scene.background = new THREE.Color(skyBottom);
+    scene.fog = new THREE.Fog(skyBottom, 50, 150);
+    
+    const groundGeo = new THREE.PlaneGeometry(WORLD_SIZE * 2, WORLD_SIZE * 2, 60, 60);
+    groundGeo.rotateX(-Math.PI / 2);
+    const positions = groundGeo.attributes.position;
+    for (let i = 0; i < positions.count; i++) {
+      const x = positions.getX(i), z = positions.getZ(i);
+      positions.setY(i, Math.sin(x * 0.15) * Math.cos(z * 0.15) * 0.25);
+    }
+    groundGeo.computeVertexNormals();
+    const ground = new THREE.Mesh(groundGeo, new THREE.MeshStandardMaterial({ color: groundColor, roughness: 0.9 }));
+    ground.receiveShadow = true;
+    environmentGroup.add(ground);
+    
+    for (let i = 0; i < 250; i++) {
+      const gx = (Math.random() - 0.5) * WORLD_SIZE * 1.9;
+      const gz = (Math.random() - 0.5) * WORLD_SIZE * 1.9;
+      if (checkWallCollision3D(gx, gz, 1.5)) continue;
+      const tuft = new THREE.Mesh(
+        new THREE.ConeGeometry(0.2 + Math.random() * 0.4, 0.5 + Math.random() * 0.8, 4),
+        new THREE.MeshStandardMaterial({ color: new THREE.Color().setHSL(isStage2 ? 0.75 : 0.28, 0.6, 0.3), roughness: 0.8 })
+      );
+      tuft.position.set(gx, 0.3, gz);
+      tuft.castShadow = true;
+      environmentGroup.add(tuft);
+    }
+    
+    map.walls.forEach(wall => {
+      const wallGroup = new THREE.Group();
+      const wallMesh = new THREE.Mesh(
+        new THREE.BoxGeometry(wall.w, wall.h, wall.d),
+        new THREE.MeshStandardMaterial({ color: isStage2 ? 0x5a3a7a : 0x8a6a4a, roughness: 0.85, metalness: 0.1, emissive: isStage2 ? 0x3a1a5a : 0x2a1a0a, emissiveIntensity: 0.3 })
+      );
+      wallMesh.position.y = wall.h / 2;
+      wallMesh.castShadow = true;
+      wallMesh.receiveShadow = true;
+      wallGroup.add(wallMesh);
+      const topMesh = new THREE.Mesh(
+        new THREE.BoxGeometry(wall.w + 0.2, 0.3, wall.d + 0.2),
+        new THREE.MeshStandardMaterial({ color: isStage2 ? 0xffd966 : 0xb95eff, emissive: isStage2 ? 0xffd966 : 0xb95eff, emissiveIntensity: 0.9 })
+      );
+      topMesh.position.y = wall.h + 0.15;
+      topMesh.castShadow = true;
+      wallGroup.add(topMesh);
+      wallGroup.position.set(wall.x, 0, wall.z);
+      environmentGroup.add(wallGroup);
+    });
+    
+    const skyGeo = new THREE.SphereGeometry(300, 32, 15);
+    const skyMat = new THREE.ShaderMaterial({
+      uniforms: { topColor: { value: new THREE.Color(skyTop) }, bottomColor: { value: new THREE.Color(skyBottom) }, offset: { value: 40 }, exponent: { value: 0.6 } },
+      vertexShader: `varying vec3 vWorldPosition; void main() { vec4 wp = modelMatrix * vec4(position, 1.0); vWorldPosition = wp.xyz; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+      fragmentShader: `uniform vec3 topColor; uniform vec3 bottomColor; uniform float offset; uniform float exponent; varying vec3 vWorldPosition; void main() { float h = normalize(vWorldPosition + offset).y; gl_FragColor = vec4(mix(bottomColor, topColor, max(pow(max(h, 0.0), exponent), 0.0)), 1.0); }`,
+      side: THREE.BackSide
+    });
+    scene.add(new THREE.Mesh(skyGeo, skyMat));
+    
+    if (isStage2) {
+      for (let i = 0; i < 15; i++) {
+        const glowColor = [0xffd966, 0xb95eff, 0xff6b6b][randInt(0, 2)];
+        const glowLight = new THREE.PointLight(glowColor, 1.5, 15);
+        glowLight.position.set((Math.random() - 0.5) * WORLD_SIZE * 1.5, 3 + Math.random() * 3, (Math.random() - 0.5) * WORLD_SIZE * 1.5);
+        environmentGroup.add(glowLight);
+      }
+    }
+  }
+  
+  function checkWallCollision3D(x, z, radius) {
+    for (const wall of currentWalls) {
+      if (x > wall.x - wall.w/2 - radius && x < wall.x + wall.w/2 + radius &&
+          z > wall.z - wall.d/2 - radius && z < wall.z + wall.d/2 + radius) return true;
+    }
+    return false;
+  }
+  
+  function createBrawler3D(brawler, isPlayer) {
+    const group = new THREE.Group();
+    const color1 = new THREE.Color(brawler.color1);
+    const color2 = new THREE.Color(brawler.color2);
+    const rarityColor = new THREE.Color(RARITY_COLORS[brawler.rarity]);
+    
+    const body = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.9, 1.8, 12),
+      new THREE.MeshStandardMaterial({ color: color1, roughness: 0.5, metalness: 0.2, emissive: color1, emissiveIntensity: 0.15 }));
+    body.position.y = 1.4; body.castShadow = true; group.add(body);
+    
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.75, 16, 12),
+      new THREE.MeshStandardMaterial({ color: color2, roughness: 0.4, metalness: 0.3, emissive: color2, emissiveIntensity: 0.2 }));
+    head.position.y = 2.8; head.castShadow = true; group.add(head);
+    
+    const cv = document.createElement('canvas'); cv.width = 128; cv.height = 128;
+    const ctx2d = cv.getContext('2d');
+    ctx2d.font = 'bold 100px Arial'; ctx2d.textAlign = 'center'; ctx2d.textBaseline = 'middle';
+    ctx2d.fillText(brawler.emoji, 64, 70);
+    const emojiSprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(cv), depthTest: false }));
+    emojiSprite.scale.set(1.5, 1.5, 1); emojiSprite.position.y = 2.9; group.add(emojiSprite);
+    
+    const gunGroup = new THREE.Group();
+    const gunBody = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.3, 1.2), new THREE.MeshStandardMaterial({ color: 0x333333, metalness: 0.8, roughness: 0.3 }));
+    gunBody.castShadow = true; gunGroup.add(gunBody);
+    const gunTipGeo = new THREE.CylinderGeometry(0.12, 0.12, 0.5, 8); gunTipGeo.rotateX(Math.PI / 2);
+    const gunTip = new THREE.Mesh(gunTipGeo, new THREE.MeshStandardMaterial({ color: brawler.bullet.color, emissive: brawler.bullet.color, emissiveIntensity: 0.8 }));
+    gunTip.position.z = 0.8; gunGroup.add(gunTip);
+    gunGroup.position.set(0.9, 1.8, 0.3); group.add(gunGroup);
+    group.userData.gun = gunGroup;
+    
+    const legMat = new THREE.MeshStandardMaterial({ color: color2, roughness: 0.7 });
+    for (let i = 0; i < 2; i++) {
+      const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.25, 0.9, 8), legMat);
+      leg.position.set(i === 0 ? -0.4 : 0.4, 0.45, 0); leg.castShadow = true; group.add(leg);
+    }
+    
+    const auraGeo = new THREE.RingGeometry(1.0, 1.3, 24); auraGeo.rotateX(-Math.PI / 2);
+    const aura = new THREE.Mesh(auraGeo, new THREE.MeshBasicMaterial({ color: rarityColor, transparent: true, opacity: isPlayer ? 0.5 : 0.3, side: THREE.DoubleSide, depthWrite: false }));
+    aura.position.y = 0.05; group.add(aura); group.userData.aura = aura;
+    
+    if (!isPlayer) {
+      const starsGroup = new THREE.Group();
+      for (let i = 0; i < 2; i++) {
+        const star = new THREE.Mesh(new THREE.SphereGeometry(0.15, 8, 6), new THREE.MeshStandardMaterial({ color: 0xffd966, emissive: 0xffd966, emissiveIntensity: 0.3 }));
+        star.position.set((i - 0.5) * 0.5, 4.0, 0); starsGroup.add(star);
+      }
+      group.add(starsGroup); group.userData.stars = starsGroup;
+    }
+    
+    if (!isPlayer) {
+      const hpBarGroup = new THREE.Group();
+      const bg = new THREE.Mesh(new THREE.PlaneGeometry(1.8, 0.18), new THREE.MeshBasicMaterial({ color: 0x1a0808, side: THREE.DoubleSide }));
+      hpBarGroup.add(bg);
+      const fill = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 0.14), new THREE.MeshBasicMaterial({ color: 0xff3a3a, side: THREE.DoubleSide }));
+      fill.position.z = 0.01; hpBarGroup.add(fill);
+      hpBarGroup.position.y = 3.7; hpBarGroup.userData.fill = fill; group.add(hpBarGroup);
+      group.userData.hpBar = hpBarGroup;
+    }
+    
+    const shadowGeo = new THREE.CircleGeometry(1.2, 16); shadowGeo.rotateX(-Math.PI / 2);
+    const shadow = new THREE.Mesh(shadowGeo, new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.3, depthWrite: false }));
+    shadow.position.y = 0.02; group.add(shadow);
+    return group;
+  }
+  
+  function createPlayer3D() {
+    if (player3D) scene.remove(player3D);
+    player3D = createBrawler3D(state.selectedBrawler, true);
+    player3D.position.set(state.playerX, 0, state.playerZ);
+    player3D.rotation.y = -state.facingAngle + Math.PI/2;
+    scene.add(player3D);
+    const aimGeo = new THREE.BufferGeometry();
+    aimGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array([0, 0.8, 0, 3, 0.8, 0]), 3));
+    aimLine3D = new THREE.Line(aimGeo, new THREE.LineBasicMaterial({ color: 0xffff00, transparent: true, opacity: 0.5 }));
+    scene.add(aimLine3D);
+  }
+  
+  // ============ DOOR ============
+  function createDoor() {
+    if (doorGroup) scene.remove(doorGroup);
+    doorGroup = new THREE.Group();
+    const pos = findSpawnPosition(0);
+    doorPosition = { x: pos.x, z: pos.z };
+    
+    const frameMat = new THREE.MeshStandardMaterial({ color: 0xffd966, emissive: 0xffd966, emissiveIntensity: 1.2, metalness: 0.8, roughness: 0.2 });
+    
+    const leftPillar = new THREE.Mesh(new THREE.BoxGeometry(0.6, 8, 0.6), frameMat);
+    leftPillar.position.set(-2.5, 4, 0); leftPillar.castShadow = true; doorGroup.add(leftPillar);
+    
+    const rightPillar = new THREE.Mesh(new THREE.BoxGeometry(0.6, 8, 0.6), frameMat);
+    rightPillar.position.set(2.5, 4, 0); rightPillar.castShadow = true; doorGroup.add(rightPillar);
+    
+    const topBeam = new THREE.Mesh(new THREE.BoxGeometry(5.6, 0.6, 0.6), frameMat);
+    topBeam.position.set(0, 8, 0); topBeam.castShadow = true; doorGroup.add(topBeam);
+    
+    const portalMat = new THREE.MeshBasicMaterial({ color: 0xb95eff, transparent: true, opacity: 0.7, side: THREE.DoubleSide });
+    const portal = new THREE.Mesh(new THREE.PlaneGeometry(4.4, 7.4), portalMat);
+    portal.position.set(0, 4, 0); doorGroup.add(portal);
+    doorGroup.userData.portal = portal;
+    
+    const innerGlow = new THREE.PointLight(0xb95eff, 3, 20);
+    innerGlow.position.set(0, 4, 0); doorGroup.add(innerGlow);
+    
+    for (let i = 0; i < 12; i++) {
+      const star = new THREE.Mesh(new THREE.SphereGeometry(0.15, 6, 4), new THREE.MeshBasicMaterial({ color: 0xffd966 }));
+      const angle = (i / 12) * Math.PI * 2;
+      const radius = 2.8 + Math.random() * 0.5;
+      star.position.set(Math.cos(angle) * radius, 2 + Math.random() * 5, Math.sin(angle) * 0.3);
+      star.userData.angle = angle;
+      star.userData.radius = radius;
+      star.userData.speed = 0.5 + Math.random() * 1.5;
+      star.userData.baseY = 2 + Math.random() * 5;
+      doorGroup.add(star);
+    }
+    
+    const ringGeo = new THREE.RingGeometry(3, 3.5, 32); ringGeo.rotateX(-Math.PI / 2);
+    const ring = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({ color: 0xffd966, transparent: true, opacity: 0.6, side: THREE.DoubleSide }));
+    ring.position.y = 0.1; doorGroup.add(ring);
+    
+    doorGroup.position.set(doorPosition.x, 0, doorPosition.z);
+    scene.add(doorGroup);
+    doorOpen = false;
+    state.doorSpawned = true;
+  }
+  
+  function updateDoor(time) {
+    if (!doorGroup) return;
+    if (doorGroup.userData.portal) {
+      doorGroup.userData.portal.material.opacity = 0.5 + Math.sin(time * 3) * 0.3;
+    }
+    doorGroup.children.forEach(child => {
+      if (child.userData.angle !== undefined) {
+        child.userData.angle += child.userData.speed * 0.02;
+        child.position.x = Math.cos(child.userData.angle) * child.userData.radius;
+        child.position.z = Math.sin(child.userData.angle) * child.userData.radius;
+        child.position.y = child.userData.baseY + Math.sin(time * 2 + child.userData.angle) * 0.3;
+      }
+    });
+  }
+  
+  function checkDoorCollision() {
+    if (!doorGroup || doorOpen) return false;
+    const d = dist(state.playerX, state.playerZ, doorPosition.x, doorPosition.z);
+    return d < DOOR_RADIUS;
+  }
+  
+  function findSpawnPosition(minDistFromPlayer = 15) {
+    let x, z, tries = 0;
+    do {
+      x = (Math.random() - 0.5) * WORLD_SIZE * 1.3;
+      z = (Math.random() - 0.5) * WORLD_SIZE * 1.3;
+      tries++;
+    } while (tries < 300 && (dist(x, z, state.playerX, state.playerZ) < minDistFromPlayer || checkWallCollision3D(x, z, 2.5)));
+    return { x, z };
+  }
+  
+  function spawnEnemies3D() {
+    enemyMeshes.forEach(e => scene.remove(e.mesh));
+    state.enemies = []; enemyMeshes = [];
+    const selected = shuffle([...ENEMY_BRAWLERS]).slice(0, enemiesPerStage);
+    
+    for (let i = 0; i < selected.length; i++) {
+      const baseBrawler = selected[i];
+      const brawler = { ...baseBrawler, hp: Math.floor(baseBrawler.hp * enemyHpMultiplier), speed: baseBrawler.speed * enemySpeedMultiplier };
+      
+      const pos = findSpawnPosition(18);
+      const mesh = createBrawler3D(brawler, false);
+      mesh.position.set(pos.x, 0, pos.z);
+      
+      if (currentStage === 2) {
+        const auraMesh = mesh.userData.aura;
+        if (auraMesh) { auraMesh.material.opacity = 0.6; auraMesh.scale.setScalar(1.2); }
+        const extraGlow = new THREE.PointLight(0xff3a3a, 0.8, 6);
+        extraGlow.position.y = 2; mesh.add(extraGlow);
+      }
+      
+      scene.add(mesh);
+      state.enemies.push({
+        id: i, x: pos.x, z: pos.z, hp: brawler.hp, hpMax: brawler.hp,
+        brawler, speed: brawler.speed, correctHits: 0, hasQuestion: false,
+        moveDir: { x: 0, z: 0 }, lastShotTime: 0, mesh,
+        hpFillMesh: mesh.userData.hpBar.userData.fill,
+        hpBarGroup: mesh.userData.hpBar,
+        starMeshes: mesh.userData.stars.children,
+        floatingOffset: Math.random() * Math.PI * 2
+      });
+      enemyMeshes.push({ mesh, enemy: state.enemies[i] });
+    }
+    updateEnemyCount();
+  }
+  
+  function updateEnemyCount() { enemyCountDisplay.textContent = state.enemies.length; }
+  
+  function shoot3D(fromX, fromZ, angle, isEnemy, sourceEnemy, brawler) {
+    const bulletData = brawler.bullet;
+    const speed = 35;
+    const bulletGroup = new THREE.Group();
+    const core = new THREE.Mesh(new THREE.SphereGeometry(bulletData.size * 0.4, 12, 8), new THREE.MeshStandardMaterial({ color: bulletData.color, emissive: bulletData.color, emissiveIntensity: 1.0, roughness: 0.2 }));
+    bulletGroup.add(core);
+    const glow = new THREE.Mesh(new THREE.SphereGeometry(bulletData.size * 0.8, 8, 6), new THREE.MeshBasicMaterial({ color: bulletData.glow, transparent: true, opacity: 0.4, depthWrite: false }));
+    bulletGroup.add(glow);
+    bulletGroup.add(new THREE.PointLight(bulletData.color, 1.5, 8));
+    bulletGroup.position.set(fromX, 1.8, fromZ);
+    scene.add(bulletGroup);
+    state.bullets.push({ x: fromX, z: fromZ, vx: Math.cos(angle) * speed, vz: Math.sin(angle) * speed, life: 1.5, isEnemy, source: sourceEnemy, mesh: bulletGroup, size: bulletData.size, damage: isEnemy ? 12 : 34 });
+    if (!isEnemy) soundShoot();
+  }
+  
+  // ============ TIMER ============
+  function formatTime(seconds) {
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  }
+  
+  function updateTimerUI() {
+    timerValue.textContent = formatTime(Math.max(0, timeRemaining));
+    timerHud.classList.remove('warning', 'danger');
+    if (timeRemaining <= 30) timerHud.classList.add('danger');
+    else if (timeRemaining <= 60) timerHud.classList.add('warning');
+  }
+  
+  function resetTimer() {
+    timeRemaining = STAGE_TIME;
+    lastTickSecond = -1;
+    updateTimerUI();
+  }
+  
+  // ============ СҰРАҚ ============
+  function onNearEnemy(enemy) {
+    if (state.answerActive || state.pendingEnemy) return;
+    if (enemy.hasQuestion) return;
+    state.pendingEnemy = enemy;
+    startQuestion(enemy);
+  }
+  
+  function startQuestion(enemy) {
+    state.answerActive = true;
+    let problem;
+    if (state.selectedTopic && state.selectedTopic.generate) {
+      problem = getUniqueTask(state.selectedTopic.id, state.selectedTopic.generate);
+    } else {
+      problem = genSquareRoot8();
+    }
+    
+    const correct = problem.correct;
+    enemy.question = { correct, questionStr: problem.question };
+    enemy.hasQuestion = true;
+    
+    answerQuestion.innerHTML = problem.question;
+    answerHint.textContent = problem.hint;
+    taskTypeBadge.textContent = (state.selectedTopic ? state.selectedTopic.name : 'ТАПСЫРМА') + ' · ' + state.stage + '-КЕЗЕҢ';
+    
+    answerEnemyAvatar.textContent = enemy.brawler.emoji;
+    answerEnemyAvatar.style.background = `radial-gradient(circle at 35% 30%, ${enemy.brawler.color1}, ${enemy.brawler.color2})`;
+    answerEnemyAvatar.style.borderColor = RARITY_COLORS[enemy.brawler.rarity];
+    answerEnemyName.textContent = enemy.brawler.name + (currentStage === 2 ? ' 🔥' : '');
+    
+    answerHit1.classList.toggle('filled', enemy.correctHits >= 1);
+    answerHit2.classList.toggle('filled', enemy.correctHits >= 2);
+    
+    answerGrid.innerHTML = '';
+    problem.answers.forEach(ans => {
+      const btn = document.createElement('button');
+      btn.className = 'answer-btn';
+      btn.innerHTML = ans.text;
+      btn.dataset.value = ans.value;
+      const handler = (e) => { e.preventDefault(); e.stopPropagation(); handleAnswer(ans.value, correct, enemy); };
+      btn.addEventListener('click', handler);
+      btn.addEventListener('touchstart', handler, { passive: false });
+      answerGrid.appendChild(btn);
+    });
+    answerOverlay.classList.add('show');
+  }
+  
+  function handleAnswer(selectedValue, correct, enemy) {
+    if (!state.answerActive) return;
+    state.answerActive = false;
+    Array.from(answerGrid.children).forEach(b => b.disabled = true);
+    const isCorrect = (selectedValue === correct);
+    
+    if (isCorrect) {
+      soundCorrect();
+      Array.from(answerGrid.children).forEach(b => { if (b.dataset.value === correct) b.classList.add('correct'); });
+      enemy.correctHits++;
+      answerHit1.classList.toggle('filled', enemy.correctHits >= 1);
+      answerHit2.classList.toggle('filled', enemy.correctHits >= 2);
+      if (enemy.starMeshes) {
+        enemy.starMeshes.forEach((s, i) => { if (i < enemy.correctHits) { s.material.emissiveIntensity = 1.0; s.scale.setScalar(1.3); } });
+      }
+      state.score += (10 + state.combo * 2) * state.stage;
+      state.combo++;
+      state.superMeter = Math.min(100, state.superMeter + 20);
+      updateScoreUI(); updateSuperUI();
+      if (state.combo >= 3) showCombo(`🔥 x${state.combo} КОМБО!`);
+      enemy.hp = Math.max(0, enemy.hp - enemy.hpMax / HITS_TO_KILL);
+      updateEnemyHp(enemy);
+      const angle = Math.atan2(enemy.z - state.playerZ, enemy.x - state.playerX);
+      const bulletConf = state.selectedBrawler.bullet;
+      setTimeout(() => {
+        for (let i = 0; i < bulletConf.count; i++) {
+          const offset = (i - (bulletConf.count-1)/2) * bulletConf.spread;
+          setTimeout(() => { shoot3D(state.playerX, state.playerZ, angle + offset, false, null, state.selectedBrawler); }, i * 40);
+        }
+      }, 200);
+      if (enemy.correctHits >= HITS_TO_KILL) {
+        showFeedback('💥 ЖОЙЫЛДЫ!', '#4dd66d');
+        setTimeout(() => {
+          killEnemy3D(enemy);
+          answerOverlay.classList.remove('show');
+          state.pendingEnemy = null; enemy.hasQuestion = false;
+          Array.from(answerGrid.children).forEach(b => { b.disabled = false; b.classList.remove('correct', 'wrong'); });
+        }, 900);
+        return;
+      } else {
+        showFeedback('КЕРЕМЕТ!', '#4dd66d');
+      }
+      if (state.superMeter >= 100) {
+        setTimeout(() => {
+          soundSuper(); state.superMeter = 0; updateSuperUI();
+          state.enemies.forEach(e => {
+            e.hp -= 20; updateEnemyHp(e);
+            e.mesh.children.forEach(c => { if (c.material && c.material.emissive) { c.material.emissive = new THREE.Color(0xb95eff); c.material.emissiveIntensity = 1.0; } });
+            setTimeout(() => { e.mesh.children.forEach(c => { if (c.material && c.material.emissive) { c.material.emissiveIntensity = 0.15; } }); }, 400);
+          });
+          showFeedback('⚡ СУПЕР!', '#b95eff');
+        }, 800);
+      }
+    } else {
+      soundWrong();
+      state.combo = 0; state.wrongAnswers++; updateLivesUI();
+      Array.from(answerGrid.children).forEach(b => { if (b.dataset.value === correct) b.classList.add('correct'); else if (b.dataset.value === selectedValue) b.classList.add('wrong'); });
+      showFeedback('ҚАТЕ!', '#ff6b6b');
+      if (state.wrongAnswers >= MAX_WRONG) {
+        setTimeout(() => { answerOverlay.classList.remove('show'); endGame(false); }, 1200);
+        return;
+      }
+      setTimeout(() => {
+        const angle = Math.atan2(state.playerZ - enemy.z, state.playerX - enemy.x);
+        shoot3D(enemy.x, enemy.z, angle, true, enemy, enemy.brawler);
+      }, 400);
+    }
+    
+    setTimeout(() => {
+      answerOverlay.classList.remove('show');
+      enemy.hasQuestion = false; enemy.question = null; state.pendingEnemy = null;
+      Array.from(answerGrid.children).forEach(b => { b.disabled = false; b.classList.remove('correct', 'wrong'); });
+    }, 900);
+  }
+  
+  function updateLivesUI() {
+    life1.classList.toggle('lost', state.wrongAnswers >= 1);
+    life2.classList.toggle('lost', state.wrongAnswers >= 2);
+    life3.classList.toggle('lost', state.wrongAnswers >= 3);
+  }
+  
+  function updateEnemyHp(enemy) {
+    const pct = Math.max(0, enemy.hp / enemy.hpMax);
+    if (enemy.hpFillMesh) {
+      enemy.hpFillMesh.scale.x = pct;
+      enemy.hpFillMesh.position.x = -(1 - pct) * 0.85;
+      enemy.hpFillMesh.material.color.setHex(pct < 0.3 ? 0xff6b6b : (pct < 0.6 ? 0xffaa00 : 0xff3a3a));
+    }
+  }
+  
+  function killEnemy3D(enemy) {
+    soundHit();
+    const color1 = new THREE.Color(enemy.brawler.color1);
+    const color2 = new THREE.Color(enemy.brawler.color2);
+    for (let i = 0; i < 25; i++) {
+      const part = new THREE.Mesh(new THREE.SphereGeometry(0.2 + Math.random() * 0.3, 6, 4), new THREE.MeshBasicMaterial({ color: Math.random() > 0.5 ? color1 : color2 }));
+      part.position.copy(enemy.mesh.position); part.position.y = 1.5;
+      scene.add(part);
+      const vx = (Math.random() - 0.5) * 15, vy = Math.random() * 10 + 5, vz = (Math.random() - 0.5) * 15;
+      const startTime = performance.now();
+      const animatePart = () => {
+        const elapsed = (performance.now() - startTime) / 1000;
+        if (elapsed > 1.5) { scene.remove(part); return; }
+        part.position.x += vx * 0.016; part.position.y += vy * 0.016 - 15 * elapsed * elapsed; part.position.z += vz * 0.016;
+        part.scale.setScalar(Math.max(0.01, 1 - elapsed / 1.5));
+        requestAnimationFrame(animatePart);
+      };
+      animatePart();
+    }
+    const flash = new THREE.PointLight(0xffffff, 3, 20);
+    flash.position.copy(enemy.mesh.position); flash.position.y = 2;
+    scene.add(flash); setTimeout(() => scene.remove(flash), 300);
+    scene.remove(enemy.mesh);
+    state.enemies = state.enemies.filter(e => e !== enemy);
+    enemyMeshes = enemyMeshes.filter(e => e.enemy !== enemy);
+    updateEnemyCount();
+    state.score += 25 * state.stage; updateScoreUI();
+    
+    if (state.enemies.length === 0 && state.stage === 1) {
+      setTimeout(() => {
+        showFeedback('🚪 ЕСІК ПАЙДА БОЛДЫ!', '#ffd966');
+        soundDoorOpen();
+        createDoor();
+        doorNotification.classList.add('show');
+      }, 800);
+    } else if (state.enemies.length === 0 && state.stage === 2) {
+      setTimeout(() => endGame(true), 800);
+    }
+  }
+  
+  function updateScoreUI() { scoreDisplay.textContent = state.score; playerHudTrophies.textContent = `🏆 ${state.score}`; }
+  function updateSuperUI() { superFill.style.width = Math.min(100, state.superMeter) + '%'; superIcon.classList.toggle('ready', state.superMeter >= 100); }
+  function showCombo(text) { comboDisplay.textContent = text; comboDisplay.classList.add('show'); clearTimeout(comboDisplay._t); comboDisplay._t = setTimeout(() => comboDisplay.classList.remove('show'), 1200); }
+  function showFeedback(text, color) { feedback.textContent = text; feedback.style.color = color; feedback.classList.remove('show'); void feedback.offsetWidth; feedback.classList.add('show'); }
+  
+  // ============ STAGE TRANSITION ============
+  function goToStage2() {
+    doorOpen = true;
+    soundStageTransition();
+    if (doorGroup) { scene.remove(doorGroup); doorGroup = null; }
+    doorNotification.classList.remove('show');
+    
+    stageTransitionOverlay.classList.add('show');
+    stageTransitionTitle.textContent = '2 КЕЗЕҢ';
+    stageTransitionIcon.textContent = '🔥';
+    stageTransitionSubtitle.textContent = 'Жаулар күшейтілді! Дайын болыңыз!';
+    
+    setTimeout(() => {
+      state.stage = 2;
+      currentStage = 2;
+      enemiesPerStage = 8;
+      enemyHpMultiplier = 1.5;
+      enemySpeedMultiplier = 1.3;
+      
+      stageHud.textContent = '2 КЕЗЕҢ';
+      stageHud.style.color = '#ff6b6b';
+      stageHud.style.borderColor = '#ff6b6b';
+      stageHud.style.boxShadow = '0 0 30px rgba(255,60,60,0.7)';
+      
+      build3DWorld(MAPS[state.mapIndex], true);
+      createPlayer3D();
+      
+      state.playerX = 0; state.playerZ = 0;
+      let tries = 0;
+      while (checkWallCollision3D(state.playerX, state.playerZ, 1.5) && tries < 50) {
+        state.playerX = (Math.random() - 0.5) * WORLD_SIZE * 0.5;
+        state.playerZ = (Math.random() - 0.5) * WORLD_SIZE * 0.5;
+        tries++;
+      }
+      if (player3D) player3D.position.set(state.playerX, 0, state.playerZ);
+      
+      spawnEnemies3D();
+      
+      // Денсаулықты қалпына келтіру
+      state.wrongAnswers = Math.max(0, state.wrongAnswers - 1);
+      updateLivesUI();
+      
+      // ТАЙМЕРДІ ҚАЙТА БАСТАУ
+      resetTimer();
+      
+      stageTransitionOverlay.classList.remove('show');
+      showFeedback('2 КЕЗЕҢ БАСТАЛДЫ!', '#ffd966');
+      state.doorSpawned = false;
+      doorOpen = false;
+    }, 2500);
+  }
+  
+  function update3D(dt) {
+    if (!state.gameActive) return;
+    
+    // ТАЙМЕР
+    if (!state.paused) {
+      timeRemaining -= dt;
+      const currentSec = Math.floor(timeRemaining);
+      if (currentSec !== lastTickSecond && currentSec <= 10 && currentSec >= 0) {
+        lastTickSecond = currentSec;
+        soundTick();
+      }
+      updateTimerUI();
+      
+      if (timeRemaining <= 0) {
+        timeRemaining = 0;
+        soundTimeUp();
+        showFeedback('⏰ УАҚЫТ БІТТІ!', '#ff3a3a');
+        setTimeout(() => endGame(false), 1200);
+        state.gameActive = false;
+        return;
+      }
+    }
+    
+    let dx = 0, dz = 0;
+    if (state.keys['w'] || state.keys['arrowup']) dz -= 1;
+    if (state.keys['s'] || state.keys['arrowdown']) dz += 1;
+    if (state.keys['a'] || state.keys['arrowleft']) dx -= 1;
+    if (state.keys['d'] || state.keys['arrowright']) dx += 1;
+    const len = Math.sqrt(dx*dx + dz*dz);
+    if (len > 1) { dx /= len; dz /= len; }
+    if (dx !== 0 || dz !== 0) {
+      const newX = state.playerX + dx * PLAYER_SPEED_3D * dt;
+      const newZ = state.playerZ + dz * PLAYER_SPEED_3D * dt;
+      if (!checkWallCollision3D(newX, state.playerZ, 1.2)) state.playerX = newX;
+      if (!checkWallCollision3D(state.playerX, newZ, 1.2)) state.playerZ = newZ;
+      const maxDist = WORLD_SIZE * 0.85;
+      state.playerX = Math.max(-maxDist, Math.min(maxDist, state.playerX));
+      state.playerZ = Math.max(-maxDist, Math.min(maxDist, state.playerZ));
+    }
+    state.facingAngle = state.aimAngle;
+    if (player3D) {
+      player3D.position.x += (state.playerX - player3D.position.x) * 0.4;
+      player3D.position.z += (state.playerZ - player3D.position.z) * 0.4;
+      player3D.rotation.y = -state.facingAngle + Math.PI/2;
+      if (player3D.userData.aura) player3D.userData.aura.scale.setScalar(1 + Math.sin(performance.now() * 0.003) * 0.1);
+    }
+    if (aimLine3D) { aimLine3D.position.set(state.playerX, 0, state.playerZ); aimLine3D.rotation.y = -state.aimAngle; }
+    
+    if (doorGroup) {
+      updateDoor(performance.now() / 1000);
+      if (checkDoorCollision() && !doorOpen) {
+        goToStage2();
+        return;
+      }
+    }
+    
+    state.enemies.forEach(enemy => {
+      const d = dist(enemy.x, enemy.z, state.playerX, state.playerZ);
+      if (d < ENEMY_QUESTION_RANGE && !state.answerActive && !state.pendingEnemy && !enemy.hasQuestion) onNearEnemy(enemy);
+      if (d < ENEMY_DETECT_RANGE && d > 4 && !state.answerActive) {
+        const angle = Math.atan2(enemy.z - state.playerZ, enemy.x - state.playerX);
+        enemy.moveDir.x = Math.cos(angle); enemy.moveDir.z = Math.sin(angle);
+        const newX = enemy.x + enemy.moveDir.x * enemy.speed * dt;
+        const newZ = enemy.z + enemy.moveDir.z * enemy.speed * dt;
+        if (!checkWallCollision3D(newX, enemy.z, 1.2)) enemy.x = newX;
+        if (!checkWallCollision3D(enemy.x, newZ, 1.2)) enemy.z = newZ;
+      }
+      const shotInterval = currentStage === 2 ? 1600 : 2200;
+      if (d < ENEMY_DETECT_RANGE && d > 7 && performance.now() - enemy.lastShotTime > shotInterval && !state.answerActive) {
+        enemy.lastShotTime = performance.now();
+        shoot3D(enemy.x, enemy.z, Math.atan2(state.playerZ - enemy.z, state.playerX - enemy.x), true, enemy, enemy.brawler);
+      }
+      enemy.mesh.position.x += (enemy.x - enemy.mesh.position.x) * 0.3;
+      enemy.mesh.position.z += (enemy.z - enemy.mesh.position.z) * 0.3;
+      if (d < ENEMY_DETECT_RANGE) {
+        enemy.mesh.rotation.y = -Math.atan2(state.playerZ - enemy.z, state.playerX - enemy.x) + Math.PI/2;
+      }
+      enemy.mesh.position.y = Math.sin(performance.now() * 0.002 + enemy.floatingOffset) * 0.1;
+      if (enemy.mesh.userData.aura) enemy.mesh.userData.aura.scale.setScalar(1 + Math.sin(performance.now() * 0.004 + enemy.floatingOffset) * 0.15);
+      if (enemy.hpBarGroup) enemy.hpBarGroup.lookAt(camera.position);
+    });
+    
+    state.bullets = state.bullets.filter(bullet => {
+      bullet.x += bullet.vx * dt; bullet.z += bullet.vz * dt; bullet.life -= dt;
+      bullet.mesh.position.x = bullet.x; bullet.mesh.position.z = bullet.z;
+      if (bullet.life <= 0 || Math.abs(bullet.x) > WORLD_SIZE || Math.abs(bullet.z) > WORLD_SIZE) { scene.remove(bullet.mesh); return false; }
+      if (checkWallCollision3D(bullet.x, bullet.z, 0.3)) { scene.remove(bullet.mesh); return false; }
+      if (!bullet.isEnemy) {
+        for (const enemy of state.enemies) {
+          if (dist(bullet.x, bullet.z, enemy.x, enemy.z) < 1.5 + bullet.size * 0.3) { soundHit(); scene.remove(bullet.mesh); return false; }
+        }
+      } else {
+        if (dist(bullet.x, bullet.z, state.playerX, state.playerZ) < 1.5) { scene.remove(bullet.mesh); return false; }
+      }
+      return true;
+    });
+    
+    const camDist = state.cameraDistance, camYaw = state.cameraYaw, camPitch = state.cameraPitch;
+    const targetCamX = state.playerX + Math.sin(camYaw) * camDist * Math.cos(camPitch);
+    const targetCamZ = state.playerZ + Math.cos(camYaw) * camDist * Math.cos(camPitch);
+    const targetCamY = 3 + Math.sin(camPitch) * camDist;
+    camera.position.x += (targetCamX - camera.position.x) * 0.15;
+    camera.position.y += (targetCamY - camera.position.y) * 0.15;
+    camera.position.z += (targetCamZ - camera.position.z) * 0.15;
+    camera.lookAt(state.playerX, 1.5, state.playerZ);
+    if (compassNeedle) compassNeedle.style.transform = `rotate(${(state.cameraYaw * 180 / Math.PI) % 360}deg)`;
+    drawMinimap();
+  }
+  
+  function drawMinimap() {
+    const w = minimapCanvas.width, h = minimapCanvas.height;
+    mmCtx.clearRect(0, 0, w, h);
+    mmCtx.fillStyle = 'rgba(20, 10, 40, 0.8)';
+    mmCtx.fillRect(0, 0, w, h);
+    const worldToMap = (x) => (x / (WORLD_SIZE * 2) + 0.5) * w;
+    const worldToMapZ = (z) => (z / (WORLD_SIZE * 2) + 0.5) * h;
+    currentWalls.forEach(wall => {
+      const mx = worldToMap(wall.x - wall.w/2), mz = worldToMapZ(wall.z - wall.d/2);
+      const mw = (wall.w / (WORLD_SIZE * 2)) * w, mh = (wall.d / (WORLD_SIZE * 2)) * h;
+      mmCtx.fillStyle = 'rgba(185, 94, 255, 0.5)'; mmCtx.fillRect(mx, mz, mw, mh);
+      mmCtx.strokeStyle = '#b95eff'; mmCtx.lineWidth = 1; mmCtx.strokeRect(mx, mz, mw, mh);
+    });
+    if (doorGroup && !doorOpen) {
+      mmCtx.fillStyle = '#ffd966'; mmCtx.shadowColor = '#ffd966'; mmCtx.shadowBlur = 15;
+      mmCtx.beginPath(); mmCtx.arc(worldToMap(doorPosition.x), worldToMapZ(doorPosition.z), 7, 0, Math.PI*2); mmCtx.fill();
+      mmCtx.shadowBlur = 0;
+    }
+    state.enemies.forEach(e => {
+      mmCtx.fillStyle = currentStage === 2 ? '#ff6b6b' : '#ff3a3a';
+      mmCtx.beginPath(); mmCtx.arc(worldToMap(e.x), worldToMapZ(e.z), 3, 0, Math.PI*2); mmCtx.fill();
+    });
+    mmCtx.fillStyle = '#b95eff'; mmCtx.shadowColor = '#b95eff'; mmCtx.shadowBlur = 10;
+    mmCtx.beginPath(); mmCtx.arc(worldToMap(state.playerX), worldToMapZ(state.playerZ), 5, 0, Math.PI*2); mmCtx.fill();
+    mmCtx.shadowBlur = 0;
+    mmCtx.strokeStyle = '#b95eff'; mmCtx.lineWidth = 2;
+    mmCtx.beginPath();
+    mmCtx.moveTo(worldToMap(state.playerX), worldToMapZ(state.playerZ));
+    mmCtx.lineTo(worldToMap(state.playerX) + Math.cos(state.aimAngle) * 10, worldToMapZ(state.playerZ) + Math.sin(state.aimAngle) * 10);
+    mmCtx.stroke();
+  }
+  
+  function animate3D() {
+    requestAnimationFrame(animate3D);
+    if (!renderer) return;
+    const dt = Math.min(0.05, clock.getDelta());
+    update3D(dt);
+    renderer.render(scene, camera);
+  }
+  
+  function spawnConfetti() {
+    const colors = ['#b95eff', '#4dd66d', '#4da6ff', '#ff6b6b', '#ffd966', '#ffb347'];
+    for (let i = 0; i < 100; i++) {
+      setTimeout(() => {
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.style.left = Math.random() * 100 + 'vw';
+        c.style.background = colors[randInt(0, colors.length-1)];
+        c.style.animationDuration = (2 + Math.random() * 2) + 's';
+        c.style.animationDelay = (Math.random() * 0.5) + 's';
+        c.style.transform = `rotate(${Math.random() * 360}deg)`;
+        gameEl.appendChild(c);
+        setTimeout(() => c.remove(), 4500);
+      }, i * 30);
+    }
+  }
+  
+  function endGame(win) {
+    state.gameActive = false;
+    try { window.dispatchEvent(new CustomEvent("brawlmath:gameover", { detail: { score: Number(state.score) || 0, won: !!win, stage: Number(state.stage) || 1, timeRemaining: Number(timeRemaining) || 0 } })); } catch (e) { console.warn("BRAWL MATH result event failed", e); }
+    if (win) {
+      soundWin();
+      gameoverOverlay.classList.remove('lose-bg'); gameoverOverlay.classList.add('win-bg');
+      gameoverTitle.textContent = '🏆 BRAWL MATH ЖЕҢІС! 🏆';
+      gameoverTitle.classList.remove('lose');
+      gameoverMessage.textContent = 'Екі кезеңнен де өттіңіз! Барлық қарсыластарды жеңдіңіз!';
+      const stars = state.score >= 600 ? 3 : (state.score >= 350 ? 2 : 1);
+      gameoverStars.textContent = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+      gameoverScore.textContent = `🏆 Ұпай: ${state.score} · ⏱️ ${formatTime(Math.max(0, timeRemaining))} қалды`;
+      spawnConfetti();
+    } else {
+      soundLose();
+      gameoverOverlay.classList.remove('win-bg'); gameoverOverlay.classList.add('lose-bg');
+      const reason = timeRemaining <= 0 ? '⏰ Уақыт бітті!' : '3 рет қате жауап бердіңіз.';
+      gameoverTitle.textContent = '💀 BRAWL MATH ЖЕҢІЛІС 💀';
+      gameoverTitle.classList.add('lose');
+      gameoverMessage.textContent = `${reason} ${state.stage}-кезеңде жеңілдіңіз!`;
+      gameoverStars.textContent = '💀 💀 💀';
+      gameoverScore.textContent = `🏆 Ұпай: ${state.score} · ${state.stage}-кезең`;
+    }
+    setTimeout(() => gameoverOverlay.classList.add('show'), 400);
+  }
+  
+  // ============ BACK BUTTON ============
+  function quitToMenu() {
+    // Ойынды тоқтату
+    state.gameActive = false;
+    state.paused = true;
+    state.answerActive = false;
+    state.pendingEnemy = null;
+    
+    // Overlay-лерді жасыру
+    answerOverlay.classList.remove('show');
+    gameoverOverlay.classList.remove('show');
+    gameoverOverlay.classList.remove('win-bg');
+    gameoverOverlay.classList.remove('lose-bg');
+    stageTransitionOverlay.classList.remove('show');
+    doorNotification.classList.remove('show');
+    comboDisplay.classList.remove('show');
+    backGameBtn.classList.remove('show');
+    
+    // 3D заттарды тазалау
+    state.bullets.forEach(b => scene.remove(b.mesh)); state.bullets = [];
+    state.enemies.forEach(e => scene.remove(e.mesh)); state.enemies = []; enemyMeshes = [];
+    if (player3D) { scene.remove(player3D); player3D = null; }
+    if (aimLine3D) { scene.remove(aimLine3D); aimLine3D = null; }
+    if (doorGroup) { scene.remove(doorGroup); doorGroup = null; }
+    if (environmentGroup) { scene.remove(environmentGroup); environmentGroup = null; }
+    
+    doorOpen = false;
+    state.doorSpawned = false;
+    
+    // Таймерді тоқтату
+    timeRemaining = STAGE_TIME;
+    timerHud.classList.remove('warning', 'danger');
+    
+    // Күйлерді тазалау
+    state.score = 0; state.superMeter = 0; state.combo = 0; state.wrongAnswers = 0;
+    state.stage = 1;
+    currentStage = 1;
+    enemiesPerStage = 6;
+    enemyHpMultiplier = 1.0;
+    enemySpeedMultiplier = 1.0;
+    
+    stageHud.textContent = '1 КЕЗЕҢ';
+    stageHud.style.color = '#ffd966';
+    stageHud.style.borderColor = '#ffd966';
+    stageHud.style.boxShadow = '0 0 20px rgba(255,215,100,0.5)';
+    
+    updateLivesUI();
+    updateScoreUI();
+    updateSuperUI();
+    
+    // Тақырып таңдау экранына қайту
+    selectOverlay.classList.remove('show');
+    topicSelectOverlay.classList.add('show');
+    
+    soundTap();
+  }
+  
+  // ============ UI BUILDING ============
+  function buildGradeSelect() {
+    gradeGrid.innerHTML = '';
+    [5, 6, 7, 8].forEach(grade => {
+      const data = CURRICULUM[grade];
+      const card = document.createElement('div');
+      card.className = 'grade-card';
+      card.innerHTML = `
+        <div class="grade-card-emoji">${data.emoji}</div>
+        <div class="grade-card-name">${data.name}</div>
+        <div class="grade-card-desc">${data.topics.length} тақырып · 2 кезең</div>
+      `;
+      card.addEventListener('click', () => {
+        initAudio(); soundTap();
+        state.selectedGrade = grade;
+        showTopics(grade);
+      });
+      gradeGrid.appendChild(card);
+    });
+  }
+  
+  function showTopics(grade) {
+    const data = CURRICULUM[grade];
+    topicGradeBadge.textContent = data.name + ' · 1-ТОҚСАН';
+    topicList.innerHTML = '';
+    data.topics.forEach(topic => {
+      const card = document.createElement('div');
+      card.className = 'topic-card';
+      card.innerHTML = `
+        <div class="topic-card-icon">${topic.icon}</div>
+        <div class="topic-card-info">
+          <div class="topic-card-name">${topic.name}</div>
+          <div class="topic-card-count">${topic.desc}</div>
+        </div>
+      `;
+      card.addEventListener('click', () => {
+        initAudio(); soundTap();
+        state.selectedTopic = topic;
+        resetUsedTasks(topic.id);
+        showBrawlerSelect();
+      });
+      topicList.appendChild(card);
+    });
+    gradeSelectOverlay.classList.remove('show');
+    topicSelectOverlay.classList.add('show');
+  }
+  
+  function showBrawlerSelect() {
+    topicSelectOverlay.classList.remove('show');
+    selectOverlay.classList.add('show');
+    battleTopicName.textContent = state.selectedTopic.name;
+    battleTopicChip.textContent = `${state.selectedTopic.icon} ${state.selectedTopic.name}`;
+    state.mapIndex = randInt(0, MAPS.length - 1);
+    mapNameDisplay.textContent = MAPS[state.mapIndex].name;
+    buildBrawlerSelect();
+  }
+  
+  function buildBrawlerSelect() {
+    brawlerGrid.innerHTML = '';
+    BRAWLERS.forEach(b => {
+      const card = document.createElement('div');
+      card.className = 'brawler-card';
+      if (b.id === state.selectedBrawler.id) card.classList.add('selected');
+      card.innerHTML = `
+        <div class="brawler-card-avatar" style="background:radial-gradient(circle at 35% 30%, ${b.color1}, ${b.color2}); border-color:${RARITY_COLORS[b.rarity]}">${b.emoji}</div>
+        <div class="brawler-card-name">${b.name}</div>
+        <div class="brawler-card-rarity" style="color:${RARITY_COLORS[b.rarity]}">${RARITY_NAMES[b.rarity]}</div>
+      `;
+      card.addEventListener('click', () => {
+        state.selectedBrawler = b;
+        Array.from(brawlerGrid.children).forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+      });
+      brawlerGrid.appendChild(card);
+    });
+  }
+  
+  function resetGame() {
+    initAudio();
+    state.score = 0; state.superMeter = 0; state.combo = 0; state.wrongAnswers = 0;
+    state.gameActive = false; state.playerX = 0; state.playerZ = 0;
+    state.aimAngle = 0; state.facingAngle = 0;
+    state.stage = 1; state.doorSpawned = false; state.paused = false;
+    currentStage = 1;
+    enemiesPerStage = 6;
+    enemyHpMultiplier = 1.0;
+    enemySpeedMultiplier = 1.0;
+    state.bullets.forEach(b => scene.remove(b.mesh)); state.bullets = [];
+    state.enemies.forEach(e => scene.remove(e.mesh)); state.enemies = [];
+    state.answerActive = false; state.pendingEnemy = null;
+    if (player3D) scene.remove(player3D);
+    if (aimLine3D) scene.remove(aimLine3D);
+    if (doorGroup) { scene.remove(doorGroup); doorGroup = null; }
+    doorOpen = false;
+    answerOverlay.classList.remove('show');
+    gameoverOverlay.classList.remove('show');
+    gameoverOverlay.classList.remove('win-bg'); gameoverOverlay.classList.remove('lose-bg');
+    stageTransitionOverlay.classList.remove('show');
+    doorNotification.classList.remove('show');
+    comboDisplay.classList.remove('show');
+    backGameBtn.classList.remove('show');
+    document.querySelectorAll('.confetti').forEach(c => c.remove());
+    
+    stageHud.textContent = '1 КЕЗЕҢ';
+    stageHud.style.color = '#ffd966';
+    stageHud.style.borderColor = '#ffd966';
+    stageHud.style.boxShadow = '0 0 20px rgba(255,215,100,0.5)';
+    
+    resetTimer();
+    updateLivesUI();
+    
+    selectOverlay.classList.remove('show');
+    topicSelectOverlay.classList.remove('show');
+    gradeSelectOverlay.classList.add('show');
+    buildGradeSelect();
+    
+    updateScoreUI(); updateSuperUI();
+    state.cameraYaw = Math.PI * 0.25;
+    state.cameraPitch = 0.55;
+    state.cameraDistance = 22;
+  }
+  
+  function startBattle() {
+    initAudio();
+    loading3d.classList.add('show');
+    state.mapIndex = randInt(0, MAPS.length - 1);
+    
+    if (state.selectedTopic) resetUsedTasks(state.selectedTopic.id);
+    
+    setTimeout(() => {
+      state.score = 0; state.superMeter = 0; state.combo = 0; state.wrongAnswers = 0;
+      state.gameActive = true; state.playerX = 0; state.playerZ = 0;
+      state.aimAngle = 0; state.facingAngle = 0;
+      state.stage = 1; state.doorSpawned = false; state.paused = false;
+      currentStage = 1;
+      enemiesPerStage = 6;
+      enemyHpMultiplier = 1.0;
+      enemySpeedMultiplier = 1.0;
+      
+      state.bullets.forEach(b => scene.remove(b.mesh)); state.bullets = [];
+      state.answerActive = false; state.pendingEnemy = null;
+      state.enemies.forEach(e => scene.remove(e.mesh)); state.enemies = []; enemyMeshes = [];
+      if (player3D) scene.remove(player3D);
+      if (aimLine3D) scene.remove(aimLine3D);
+      if (doorGroup) { scene.remove(doorGroup); doorGroup = null; }
+      doorOpen = false;
+      
+      answerOverlay.classList.remove('show');
+      gameoverOverlay.classList.remove('show');
+      selectOverlay.classList.remove('show');
+      doorNotification.classList.remove('show');
+      
+      stageHud.textContent = '1 КЕЗЕҢ';
+      stageHud.style.color = '#ffd966';
+      stageHud.style.borderColor = '#ffd966';
+      stageHud.style.boxShadow = '0 0 20px rgba(255,215,100,0.5)';
+      
+      build3DWorld(MAPS[state.mapIndex], false);
+      createPlayer3D();
+      let tries = 0;
+      while (checkWallCollision3D(state.playerX, state.playerZ, 1.5) && tries < 50) {
+        state.playerX = (Math.random() - 0.5) * WORLD_SIZE * 0.5;
+        state.playerZ = (Math.random() - 0.5) * WORLD_SIZE * 0.5;
+        tries++;
+      }
+      spawnEnemies3D();
+      state.cameraYaw = Math.PI * 0.25;
+      state.cameraPitch = 0.55;
+      state.cameraDistance = 22;
+      
+      resetTimer();
+      updateScoreUI(); updateSuperUI(); updateLivesUI();
+      
+      // BACK BUTTON КӨРСЕТУ
+      backGameBtn.classList.add('show');
+      
+      loading3d.classList.remove('show');
+    }, 500);
+  }
+  
+  let introStarted = false;
+  function startIntro() { if (introStarted) return; introStarted = true; initAudio(); soundIntro(); }
+  setTimeout(startIntro, 300);
+  
+  tapButton.addEventListener('click', (e) => {
+    e.stopPropagation(); initAudio(); soundTap();
+    introScreen.classList.add('hide');
+    gameEl.classList.add('active');
+    setTimeout(() => { introScreen.style.display = 'none'; resetGame(); }, 800);
+  });
+  tapButton.addEventListener('touchstart', (e) => { e.preventDefault(); e.stopPropagation(); tapButton.click(); }, { passive: false });
+  introScreen.addEventListener('click', (e) => {
+    if (e.target === introScreen || e.target.classList.contains('stars-bg') || e.target.classList.contains('rays') || e.target.classList.contains('burst')) tapButton.click();
+  });
+  
+  backToGradesBtn.addEventListener('click', () => {
+    topicSelectOverlay.classList.remove('show');
+    gradeSelectOverlay.classList.add('show');
+  });
+  backToTopicsBtn.addEventListener('click', () => {
+    selectOverlay.classList.remove('show');
+    topicSelectOverlay.classList.add('show');
+  });
+  
+  // BACK GAME BUTTON
+  backGameBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    quitToMenu();
+  });
+  backGameBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    quitToMenu();
+  }, { passive: false });
+  
+  // BACK MENU BUTTON (Game Over)
+  backMenuBtn.addEventListener('click', () => {
+    gameoverOverlay.classList.remove('show');
+    quitToMenu();
+  });
+  
+  document.addEventListener('keydown', e => {
+    state.keys[e.key.toLowerCase()] = true; initAudio();
+    if (['w', 'a', 's', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(e.key.toLowerCase())) e.preventDefault();
+  });
+  document.addEventListener('keyup', e => { state.keys[e.key.toLowerCase()] = false; });
+  
+  document.querySelectorAll('.mobile-btn').forEach(btn => {
+    const key = btn.dataset.key;
+    const start = (e) => { e.preventDefault(); e.stopPropagation(); state.keys[key] = true; initAudio(); };
+    const end = (e) => { e.preventDefault(); e.stopPropagation(); state.keys[key] = false; };
+    btn.addEventListener('touchstart', start, { passive: false });
+    btn.addEventListener('touchend', end, { passive: false });
+    btn.addEventListener('touchcancel', end, { passive: false });
+    btn.addEventListener('mousedown', start);
+    btn.addEventListener('mouseup', end);
+    btn.addEventListener('mouseleave', end);
+  });
+  
+  document.addEventListener('mousemove', e => {
+    if (!state.gameActive || state.answerActive) return;
+    const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+    const dx = e.clientX - cx, dy = e.clientY - cy;
+    state.aimAngle = Math.atan2(dy, dx);
+    state.cameraYaw -= (dx / (window.innerWidth / 2)) * 0.02;
+    state.cameraPitch = Math.max(0.15, Math.min(1.3, state.cameraPitch + (dy / (window.innerHeight / 2)) * 0.01));
+  });
+  
+  document.addEventListener('wheel', e => {
+    if (!state.gameActive || state.answerActive) return;
+    state.cameraDistance += e.deltaY * 0.015;
+    state.cameraDistance = Math.max(12, Math.min(50, state.cameraDistance));
+  }, { passive: true });
+  
+  let lastTouchX = 0;
+  document.addEventListener('touchmove', e => {
+    if (!state.gameActive || state.answerActive) return;
+    if (e.touches.length === 1) {
+      const t = e.touches[0];
+      const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+      state.aimAngle = Math.atan2(t.clientY - cy, t.clientX - cx);
+      state.cameraYaw -= (t.clientX - lastTouchX) * 0.01;
+      lastTouchX = t.clientX;
+    }
+  }, { passive: true });
+  document.addEventListener('touchstart', e => { if (e.touches.length === 1) lastTouchX = e.touches[0].clientX; }, { passive: true });
+  
+  window.addEventListener('resize', () => {
+    if (camera && renderer) {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+  });
+  
+  playAgainBtn.addEventListener('click', resetGame);
+  startBattleBtn.addEventListener('click', startBattle);
+  
+  function updateMobileControls() {
+    if (window.innerWidth <= 700 || 'ontouchstart' in window) mobileControls.classList.add('show');
+    else mobileControls.classList.remove('show');
+  }
+  updateMobileControls();
+  window.addEventListener('resize', updateMobileControls);
+  
+  init3D();
+  animate3D();
+  
+})();
+</script>
+
+<script type="module">
+ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+ import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+ import { getFirestore, doc, setDoc, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+ const firebaseConfig = {
+   apiKey: "AIzaSyD8BKC3XAR4gSpZ4n4b3G1UFGsfCeb9mpg",
+   authDomain: "brawl-math.firebaseapp.com",
+   projectId: "brawl-math",
+   storageBucket: "brawl-math.firebasestorage.app",
+   messagingSenderId: "513468500861",
+   appId: "1:513468500861:web:a24d43e762a6482a759a14",
+   measurementId: "G-SJKKBQM4HP"
+ };
+ const app = initializeApp(firebaseConfig);
+ const auth = getAuth(app);
+ const db = getFirestore(app);
+ const gate = document.getElementById('bm-auth-gate');
+ const form = document.getElementById('bm-auth-form');
+ const statusEl = document.getElementById('bm-auth-status');
+ const profileFields = document.getElementById('bm-profile-fields');
+ const registerBtn = document.getElementById('bm-register');
+ const loginBtn = document.getElementById('bm-login');
+ const userBadge = document.getElementById('bm-auth-user');
+ let registerMode = false;
+ let currentProfile = null;
+ let sessionStartedAt = new Date();
+ let resultSaving = false;
+
+ function say(msg){ statusEl.textContent = msg; }
+ registerBtn.addEventListener('click', () => {
+   registerMode = !registerMode;
+   profileFields.style.display = registerMode ? 'block' : 'none';
+   loginBtn.textContent = registerMode ? 'Тіркелу' : 'Кіру';
+   registerBtn.textContent = registerMode ? 'Кіруге қайту' : 'Жаңа оқушыны тіркеу';
+   document.getElementById('bm-name').required = registerMode;
+   document.getElementById('bm-class').required = registerMode;
+   say(registerMode ? 'Аты-жөніңіз бен сыныбыңызды толтырыңыз.' : 'Аккаунтыңызға кіріңіз.');
+ });
+ form.addEventListener('submit', async (e) => {
+   e.preventDefault();
+   loginBtn.disabled = true; registerBtn.disabled = true; say('Күте тұрыңыз…');
+   const email = document.getElementById('bm-email').value.trim();
+   const password = document.getElementById('bm-password').value;
+   try {
+     if(registerMode){
+       const name = document.getElementById('bm-name').value.trim();
+       const className = document.getElementById('bm-class').value.trim();
+       if(!name || !className) throw new Error('Аты-жөні мен сыныбын толтырыңыз.');
+       const cred = await createUserWithEmailAndPassword(auth,email,password);
+       currentProfile = { uid: cred.user.uid, email, name, className, role:'student' };
+       await setDoc(doc(db,'students',cred.user.uid), { uid:cred.user.uid, email, name, className, role:'student', createdAt:serverTimestamp() });
+     } else {
+       const cred = await signInWithEmailAndPassword(auth,email,password);
+       currentProfile = { uid: cred.user.uid, email: cred.user.email, name: '', className: '', role:'user' };
+       // Existing teacher profile is not modified here. Student profile is loaded if present.
+       try {
+         const { getDoc } = await import('https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js');
+         const snap = await getDoc(doc(db,'students',cred.user.uid));
+         if(snap.exists()) currentProfile = { ...currentProfile, ...snap.data() };
+       } catch (_) {}
+     }
+     await enterGame(auth.currentUser);
+   } catch(err) {
+     console.error(err);
+     const code = err?.code || '';
+     const friendly = code.includes('invalid-credential') || code.includes('wrong-password') || code.includes('user-not-found') ? 'Логин немесе құпиясөз қате.' : code.includes('email-already-in-use') ? 'Бұл электрондық пошта тіркелген. Кіру режимін таңдаңыз.' : code.includes('weak-password') ? 'Құпиясөз кемінде 6 таңбадан тұруы керек.' : code.includes('permission-denied') ? 'Firestore рұқсаты жоқ. Қауіпсіздік ережелерін баптау қажет.' : (err.message || 'Қате орын алды.');
+     say(friendly);
+   } finally { loginBtn.disabled = false; registerBtn.disabled = false; }
+ });
+ async function enterGame(user){
+   if(!user) return;
+   gate.style.display = 'none';
+   const name = currentProfile?.name || user.email || 'Оқушы';
+   const cls = currentProfile?.className || 'Сыныбы көрсетілмеген';
+   userBadge.textContent = `Кірді: ${name} · ${cls}`;
+   userBadge.style.display = 'block';
+   sessionStartedAt = new Date();
+   // Record sign-in time; rules must allow the authenticated user to write only their own profile/session.
+   await addDoc(collection(db,'gameSessions'), { uid:user.uid, email:user.email || '', name, className:cls, enteredAt:serverTimestamp() });
+   say('');
+ }
+ onAuthStateChanged(auth, async (user) => {
+   if(user && !currentProfile){
+     currentProfile = { uid:user.uid, email:user.email || '', name:'', className:'', role:'user' };
+     try {
+       const { getDoc } = await import('https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js');
+       const snap = await getDoc(doc(db,'students',user.uid));
+       if(snap.exists()) currentProfile = { ...currentProfile, ...snap.data() };
+       await enterGame(user);
+     } catch(e) { console.warn(e); gate.style.display='flex'; say('Кіру расталды, бірақ дерекқорға жазуға рұқсат жоқ. Қауіпсіздік ережелерін баптаймыз.'); }
+   } else if(!user) { gate.style.display = 'flex'; userBadge.style.display='none'; }
+ });
+ window.addEventListener('brawlmath:gameover', async (e) => {
+   const user = auth.currentUser;
+   if(!user || resultSaving) return;
+   resultSaving = true;
+   try {
+     await addDoc(collection(db,'gameResults'), {
+       uid:user.uid, email:user.email || '',
+       name:currentProfile?.name || user.email || 'Оқушы',
+       className:currentProfile?.className || 'Сыныбы көрсетілмеген',
+       score:Number(e.detail?.score) || 0, won:!!e.detail?.won,
+       stage:Number(e.detail?.stage) || 1,
+       playedAt:serverTimestamp(), sessionStartedAt
+     });
+     userBadge.textContent = `Нәтиже сақталды · ${Number(e.detail?.score)||0} ұпай`;
+   } catch(err) {
+     console.error('Нәтижені сақтау қатесі:',err);
+     userBadge.textContent = 'Нәтиже сақталмады: дерекқор ережелерін тексеру керек.';
+   } finally { setTimeout(()=>{resultSaving=false;},1500); }
+ });
+</script>
+
+</body>
+</html>
