@@ -3463,8 +3463,18 @@
 <script type="module">
  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
  import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
- import { getFirestore, doc, setDoc, addDoc, collection, serverTimestamp, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
-
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  addDoc,
+  collection,
+  serverTimestamp,
+  getDoc,
+  getDocs,
+  query,
+  where
+} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
  const firebaseConfig = {
    apiKey: "AIzaSyD8BKC3XAR4gSpZ4n4b3G1UFGsfCeb9mpg",
    authDomain: "brawl-math.firebaseapp.com",
