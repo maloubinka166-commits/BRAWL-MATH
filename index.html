@@ -3502,7 +3502,16 @@
  async function loadProfile(user){
    // Алдымен мұғалім құжатын тексереміз: мұғалім students ішінде де болса,
    // оның teacher рөлі жоғалып кетпеуі керек.
-   const teacherSnap = await getDoc(doc(db, 'teachers', user.uid));
+   const teacherQuery = await getDocs(
+  query(
+    collection(db, 'teachers'),
+    where('uid', '==', user.uid)
+  )
+);
+const teacherSnap = {
+  exists: () => !teacherQuery.empty,
+  data: () => teacherQuery.empty ? null : teacherQuery.docs[0].data()
+};
    if (teacherSnap.exists() && teacherSnap.data()?.role === 'teacher') {
      return {
        uid: user.uid,
